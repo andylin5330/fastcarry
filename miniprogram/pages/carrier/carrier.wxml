@@ -1,0 +1,95 @@
+<view class="container">
+  
+  <view class="form-card">
+    <view class="section-title">航班信息</view>
+    <van-cell-group inset>
+      <van-field
+        value="{{ flightNo }}"
+        label="航班号"
+        placeholder="例如: CA981"
+        border="{{ false }}"
+        bind:change="onFlightInput"
+      />
+    </van-cell-group>
+  </view>
+
+  <view class="form-card">
+    <view class="section-title">行李空间</view>
+    <van-radio-group value="{{ spaceType }}" bind:change="onSpaceTypeChange" direction="horizontal" class="radio-group-spaced">
+      <van-radio name="empty" checked-color="#1eb1f7">空箱子</van-radio>
+      <van-radio name="remaining" checked-color="#1eb1f7">剩余空间</van-radio>
+      <van-radio name="abnormal" checked-color="#ff9800">异常件</van-radio>
+    </van-radio-group>
+
+    <!-- Conditional: Remaining Space Details -->
+    <view class="conditional-area" wx:if="{{spaceType === 'remaining'}}">
+       <view class="divider"></view>
+       <van-field
+          value="{{ remainingWeight }}"
+          label="剩余重量"
+          placeholder="KG"
+          type="digit"
+          bind:change="onWeightInput"
+        />
+        
+        <view class="volume-row">
+           <text class="volume-label">目测剩余体积</text>
+           <view class="chips-container">
+              <view 
+                wx:for="{{volumeOptions}}" 
+                wx:key="*this"
+                class="chip {{volumeRatio === item ? 'active' : ''}}"
+                bindtap="onVolumeSelect"
+                data-value="{{item}}"
+              >
+                {{item}}
+              </view>
+           </view>
+        </view>
+    </view>
+     <view class="conditional-area" wx:if="{{spaceType === 'abnormal'}}">
+       <view class="divider"></view>
+       <view class="tips">适合携带形状不规则或超大件物品</view>
+    </view>
+  </view>
+
+  <view class="form-card">
+    <view class="section-title">行程地点</view>
+     <van-cell-group inset>
+      <van-field
+        value="{{ departure }}"
+        label="出发地"
+        placeholder="城市/机场"
+        bind:change="onDepInput"
+      />
+      <van-field
+        value="{{ destination }}"
+        label="目的地"
+        placeholder="城市/机场"
+        border="{{ false }}"
+        bind:change="onDestInput"
+      />
+    </van-cell-group>
+  </view>
+
+  <view class="form-card">
+    <view class="section-title">收件地址 (自动保存)</view>
+     <van-field
+        value="{{ address }}"
+        type="textarea"
+        placeholder="请输入方便交接的收件地址..."
+        autosize
+        border="{{ false }}"
+        bind:change="onAddressInput"
+        custom-style="background: #f9f9f9; border-radius: 12rpx; padding: 20rpx;"
+      />
+      <view class="save-status" wx:if="{{isAddressSaved}}">
+         <van-icon name="checked" color="#4caf50" /> 已保存
+      </view>
+  </view>
+
+  <view class="action-area">
+    <van-button type="info" block round size="large" bind:click="onSubmit" color="linear-gradient(to right, #4bb0ff, #6149f6)">发布行程</van-button>
+  </view>
+
+</view>

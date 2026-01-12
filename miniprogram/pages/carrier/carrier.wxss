@@ -1,0 +1,130 @@
+/* Global Background */
+.container {
+  padding: 20rpx;
+  background-color: #f7f8fa;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* Custom Nav */
+.custom-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #ffffff;
+  z-index: 100;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.nav-content {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 0 20rpx; 
+}
+
+.back-btn {
+  position: absolute;
+  left: 30rpx; /* Adjust based on capsule position */
+  font-size: 50rpx;
+  line-height: 1;
+  padding: 10rpx 20rpx;
+}
+
+.nav-title {
+  width: 100%;
+  text-align: center;
+  font-size: 34rpx;
+  font-weight: bold;
+}
+
+/* Form Cards */
+.form-card {
+  background-color: #ffffff;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.02);
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+  border-left: 8rpx solid #1eb1f7;
+  padding-left: 15rpx;
+}
+
+/* Space Type */
+.radio-group-spaced {
+  display: flex;
+  justify-content: space-between;
+  padding: 10rpx 0;
+}
+
+/* Conditional Area */
+.conditional-area {
+  margin-top: 20rpx;
+  background: #fcfcfc;
+  padding: 20rpx;
+  border-radius: 12rpx;
+}
+
+.divider {
+  height: 1rpx;
+  background-color: #eee;
+  margin-bottom: 20rpx;
+}
+
+.volume-row {
+  margin-top: 20rpx;
+}
+
+.volume-label {
+  font-size: 28rpx;
+  color: #646566;
+  margin-bottom: 15rpx;
+  display: block;
+}
+
+.chips-container {
+  display: flex;
+  gap: 20rpx;
+}
+
+.chip {
+  padding: 10rpx 25rpx;
+  background: #f0f0f0;
+  color: #666;
+  border-radius: 30rpx;
+  font-size: 26rpx;
+  border: 1px solid transparent;
+}
+
+.chip.active {
+  background: #e6f7ff;
+  color: #1eb1f7;
+  border-color: #1eb1f7;
+  font-weight: bold;
+}
+
+.tips {
+  font-size: 24rpx;
+  color: #999;
+  text-align: center;
+}
+
+/* Address Save Status */
+.save-status {
+  text-align: right;
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 10rpx;
+}
+
+.action-area {
+  margin-top: 50rpx;
+  margin-bottom: 50rpx;
+}

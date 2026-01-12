@@ -1,0 +1,47 @@
+<view class="container">
+  
+  <!-- Blue Header Background (No Search) -->
+  <view class="header-bg"></view>
+
+  <!-- Banner Section -->
+  <view class="banner-wrapper">
+    <swiper autoplay indicator-dots circular indicator-color='rgba(255,255,255,0.6)' indicator-active-color="#fff" interval='3000' class="swiper-box">
+      <swiper-item>
+        <image src="/images/banner/redbook.png" mode="widthFix" class="banner-img" />
+      </swiper-item>
+      <swiper-item>
+        <image src="/images/banner/tiktok.png" mode="widthFix" class="banner-img" />
+      </swiper-item>
+      <swiper-item>
+        <image src="/images/banner/wechat.png" mode="widthFix" class="banner-img" />
+      </swiper-item>
+    </swiper>
+  </view>
+
+  <!-- Navigation Grid (Restored) -->
+  <view class="nav-grid">
+    <van-grid column-num="4" border="{{ false }}">
+      <block wx:for="{{ gridItems }}" wx:key="text">
+        <van-grid-item use-slot>
+           <view class="grid-icon-box">
+             <van-icon name="{{item.icon}}" size="56rpx" color="{{item.color}}" />
+             <text class="grid-text">{{item.text}}</text>
+           </view>
+        </van-grid-item>
+      </block>
+    </van-grid>
+  </view>
+
+  <!-- Main Connect Buttons -->
+  <view class="main-actions">
+    <view class="action-card carrier" bindtap="navigateToCarrier">
+       <text class="action-title">我是带货人</text>
+       <text class="action-desc">分享行李箱空间</text>
+    </view>
+    <view class="action-card sender" bindtap="navigateToSender">
+       <text class="action-title">我是需带货</text>
+       <text class="action-desc">寻找同路人</text>
+    </view>
+  </view>
+
+</view>

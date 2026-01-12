@@ -1,0 +1,73 @@
+<view class="container">
+  <van-tabs active="{{ activeTab }}" bind:change="onTabChange" color="#1eb1f7">
+    
+    <!-- Tab 1: My Shipments (I am Sender) -->
+    <van-tab title="我寄送的">
+      <view class="content-area">
+        <block wx:if="{{myOrders.length > 0}}">
+            <view class="card-wrap" wx:for="{{myOrders}}" wx:key="_id">
+                <van-card
+                    tag="{{item.status}}"
+                    price="待议"
+                    desc="路线: {{item.route}}"
+                    title="航班: {{item.flightNo}}"
+                    thumb="/images/icons/box.png" 
+                >
+                    <view slot="tags">
+                        <van-tag plain type="primary" style="margin-right: 10rpx;">重量: {{item.weight}}KG</van-tag>
+                        <van-tag plain type="warning">备注: {{item.note}}</van-tag>
+                    </view>
+                    <view slot="footer">
+                        <text class="date-text">{{item.createTime_fmt}}</text>
+                        <van-button 
+                          wx:if="{{item.status !== 'cancelled'}}" 
+                          size="mini" 
+                          plain 
+                          type="warning" 
+                          bind:click="onCancelOrder" 
+                          data-id="{{item._id}}"
+                        >取消订单</van-button>
+                    </view>
+                </van-card>
+            </view>
+        </block>
+        <block wx:else>
+            <van-empty description="暂无寄件订单" />
+        </block>
+      </view>
+    </van-tab>
+
+    <!-- Tab 2: My Trips (I am Carrier) -->
+    <van-tab title="我发布的">
+      <view class="content-area">
+          <block wx:if="{{myTrips.length > 0}}">
+             <view class="card-wrap" wx:for="{{myTrips}}" wx:key="_id">
+                <van-card
+                    tag="发布中"
+                    desc="余量: {{item.details.weight}}KG"
+                    title="航班: {{item.flightNo}}"
+                    thumb="/images/icons/delivering.png"
+                >
+                     <view slot="tags">
+                        <van-tag type="danger">{{item.route}}</van-tag>
+                    </view>
+                    <view slot="footer">
+                         <text class="date-text">{{item.createTime_fmt}}</text>
+                        <van-button 
+                            size="mini" 
+                            type="danger" 
+                            bind:click="onRemoveTrip" 
+                            data-id="{{item._id}}"
+                        >下架</van-button>
+                    </view>
+                </van-card>
+             </view>
+          </block>
+          <block wx:else>
+             <van-empty description="暂无发布行程" />
+          </block>
+      </view>
+    </van-tab>
+
+  </van-tabs>
+</view>

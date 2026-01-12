@@ -1,0 +1,67 @@
+<block wx:if="{{userInfo==null}}">
+  <!-- 显示手机号快捷登录和其他手机号登录 -->
+  <view class="container1">
+    <view class="main">
+      <view class="icon-view">
+        <!-- 应用图标 -->
+      </view>
+    </view>
+    <van-cell-group title="完善资料">
+      <van-cell title="昵称">
+        <input type="nickname" class="nickname-input" placeholder="请输入昵称" bindblur="onNicknameChange" bindinput="onNicknameChange" value="{{nickName}}" />
+      </van-cell>
+      <van-cell>
+        <button type="warn" open-type="chooseAvatar" bindchooseavatar="getAvatar">授权登录</button>
+      </van-cell>
+    </van-cell-group>
+
+    <!-- 用户协议同意 -->
+    <view class="agreement-container">
+      <checkbox class="checkbox" checked="{{agreed}}" bindtap="handleAgreeChange"></checkbox>
+      <text class="agreement-text">我已阅读并同意</text>
+      <navigator url="" class="agreement-link">《用户协议》</navigator>
+    </view>
+  </view>
+
+
+</block>
+<block wx:else>
+  <view class="container">
+    <view class="top-view">
+      <view class="user">
+        <view class="row">
+          <image class="avatar" src="{{avatarUrl}}"></image>
+          <view class="name">
+            <view bindtap="handleLogout">{{userInfo.name}}</view>
+          </view>
+        </view>
+
+      </view>
+      <view class="numbers">
+        <view class="row">
+          <text>{{userInfo.score}}</text>
+          <text>积分</text>
+        </view>
+        <view class="row">
+          <text>55</text>
+          <text>其他</text>
+        </view>
+        <view class="row">
+          <text>77</text>
+          <text>其他</text>
+        </view>
+        <view class="row">
+          <text>56</text>
+          <text>其他</text>
+        </view>
+      </view>
+    </view>
+    <van-list>
+      <van-cell title="积分兑换记录" is-link />
+      <van-cell title="我参加的活动" is-link />
+      <van-cell title="分享应用" is-link />
+      <van-cell title="联系客服" is-link />
+      <van-cell title="退出" is-link bind:tap="handleLogout"/>
+    </van-list>
+  </view>
+</block>

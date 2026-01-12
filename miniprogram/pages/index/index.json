@@ -1,0 +1,9 @@
+{
+  "usingComponents": {},
+  "navigationBarTitleText": "速带",
+  "navigationBarBackgroundColor": "#1eb1f7",
+  "navigationBarTextStyle": "black",
+  "enablePullDownRefresh": false,
+  "backgroundColor": "#00FFFF",
+  "backgroundTextStyle": "light"
+}

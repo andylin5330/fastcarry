@@ -1,0 +1,61 @@
+{
+  "pages": [
+    "pages/welcome/welcome",
+    "pages/index/index",
+    "pages/carrier/carrier",
+    "pages/sender/sender",
+    "pages/me/me",
+    "pages/profile/profile",
+    "pages/packages/packages"
+    
+  ],
+  "subPackages": [
+    {
+      "root": "welcome",
+      "name": "p1",
+      "pages": [
+        "pages/welcome/welcome"
+      ],
+      "independent": true
+    }
+  ],
+  "window": {
+    "backgroundTextStyle": "dark",
+    "enablePullDownRefresh": false,
+    "backgroundColor": "#fff",
+    "onReachBottomDistance": 100
+  },
+  "usingComponents": {
+    "van-cell": "@vant/weapp/cell/index",
+    "van-cell-group": "@vant/weapp/cell-group/index",
+    "van-notice-bar": "@vant/weapp/notice-bar/index",
+    "van-grid": "@vant/weapp/grid/index",
+    "van-grid-item": "@vant/weapp/grid-item/index",
+    "van-dropdown-menu": "@vant/weapp/dropdown-menu/index",
+    "van-dropdown-item": "@vant/weapp/dropdown-item/index"
+  },
+  "tabBar": {
+    "selectedColor": "#000000",
+    "position": "bottom",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/home.png",
+        "selectedIconPath": "images/home_selected.png"
+      },
+      {
+        "pagePath": "pages/packages/packages",
+        "text": "包裹",
+        "iconPath": "images/delivery.png",
+        "selectedIconPath": "images/delivery_selected.png"
+      },
+      {
+        "pagePath": "pages/me/me",
+        "text": "我的",
+        "iconPath": "images/user.png",
+        "selectedIconPath": "images/user_selected.png"
+      }
+    ]
+  }
+}

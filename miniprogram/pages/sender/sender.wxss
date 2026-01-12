@@ -1,0 +1,253 @@
+/* Global Background */
+.container {
+  padding: 20rpx;
+  background-color: #f7f8fa;
+  min-height: 100vh;
+}
+
+/* Unified Query Card - Floating Style */
+.query-card {
+  background-color: #ffffff;
+  border-radius: 30rpx;
+  padding: 40rpx 30rpx;
+  box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.05);
+  margin-bottom: 30rpx;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Tabs */
+.card-tabs {
+  display: flex;
+  margin-bottom: 40rpx;
+  justify-content: center;
+}
+
+.tab {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  position: relative;
+  padding-bottom: 15rpx;
+}
+
+.tab.active {
+  color: #333;
+}
+
+.tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40rpx;
+  height: 6rpx;
+  background-color: #1eb1f7;
+  border-radius: 4rpx;
+}
+
+/* Route Section */
+.route-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40rpx;
+}
+
+.location-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 1;
+}
+
+.location-name {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #1eb1f7;
+  margin-bottom: 10rpx;
+  min-height: 50rpx;
+}
+
+.location-input {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10rpx;
+  text-align: center;
+  height: 50rpx;
+  width: 100%;
+}
+
+.location-label {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.route-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 20rpx;
+}
+
+.arrow-dashed {
+  color: #c8e6c9;
+  font-size: 20rpx;
+  letter-spacing: 4rpx;
+  line-height: 1;
+}
+
+/* Divider */
+.divider {
+  height: 1rpx;
+  background-color: #f0f0f0;
+  width: 100%;
+  margin: 20rpx 0 40rpx;
+}
+
+/* General Row Styles */
+.input-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.row-label {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #1eb1f7;
+  width: 140rpx;
+  margin-right: 20rpx;
+}
+
+.row-input {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+  background: #f9f9f9;
+  padding: 15rpx 20rpx;
+  border-radius: 12rpx;
+}
+
+/* Category Row Special Layout */
+.category-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30rpx;
+  gap: 20rpx;
+}
+
+.picker-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.picker-view {
+  flex: 1;
+  background-color: #f9f9f9;
+  border-radius: 12rpx;
+  padding: 15rpx 20rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 28rpx;
+}
+
+.picker-value { color: #333; }
+.picker-placeholder { color: #bbb; }
+
+
+/* Enhanced AI Button */
+.ai-btn {
+  background: linear-gradient(135deg, #1eb1f7, #4caf50);
+  padding: 15rpx 24rpx;
+  border-radius: 12rpx;
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  box-shadow: 0 4rpx 12rpx rgba(30, 177, 247, 0.3);
+}
+
+.ai-icon {
+  width: 32rpx;
+  height: 32rpx;
+}
+
+.ai-text {
+  color: #fff;
+  font-size: 24rpx;
+  font-weight: bold;
+}
+
+
+/* Agreement */
+.agreement-box {
+  margin: 40rpx 0 30rpx;
+  display: flex;
+  justify-content: center;
+}
+
+.link-text {
+  color: #1eb1f7;
+}
+
+/* Action Button */
+.action-area {
+  margin-top: 20rpx;
+}
+
+.search-btn {
+  background-color: #0c3629; 
+  color: #ffffff;
+  border-radius: 50rpx;
+  font-size: 34rpx;
+  font-weight: bold;
+  padding: 20rpx 0;
+  box-shadow: 0 8rpx 20rpx rgba(12, 54, 41, 0.2);
+}
+
+.disclaimer {
+  text-align: center;
+  font-size: 22rpx;
+  color: #999;
+  margin-top: 20rpx;
+}
+
+/* Results - Simplified for consistency */
+.flights-list { margin-top: 20rpx; }
+.section-subtitle { font-size: 28rpx; color: #666; margin-bottom: 20rpx; padding-left: 10rpx; }
+.flight-card { background: #fff; border-radius: 20rpx; padding: 30rpx; margin-bottom: 20rpx; box-shadow: 0 4rpx 10rpx rgba(0,0,0,0.03); }
+.flight-header { display: flex; justify-content: space-between; margin-bottom: 20rpx; font-weight: bold; }
+.flight-no { color: #333; font-size: 34rpx; }
+.flight-price { color: #ff5722; font-size: 34rpx; }
+.flight-body { display: flex; justify-content: space-between; }
+.flight-info .label { font-size: 24rpx; color: #999; }
+.flight-info .value { font-size: 28rpx; color: #333; font-weight: 500; }
+
+/* Fallback */
+.fallback-section { text-align: center; padding: 40rpx 0; }
+.no-result { color: #999; font-size: 28rpx; margin-bottom: 30rpx; display: flex; flex-direction: column; gap: 10rpx; align-items: center; }
+.fallback-card { background: #fff; padding: 30rpx; border-radius: 20rpx; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4rpx 10rpx rgba(0,0,0,0.03); }
+
+/* Input Location Style */
+.input-with-icon {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.location-input {
+    flex: 1;
+    font-size: 36rpx;
+    font-weight: bold;
+    color: #333;
+    height: 60rpx;
+}
+
+.location-icon {
+    padding-left: 10rpx;
+}
