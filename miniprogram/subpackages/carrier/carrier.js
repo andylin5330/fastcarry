@@ -1,5 +1,8 @@
 Page({
     data: {
+        activeTab: 0,
+        myTrips: [],
+
         statusBarHeight: 0,
 
         // Form Data
@@ -29,6 +32,80 @@ Page({
         if (cachedAddr) {
             this.setData({ address: cachedAddr, isAddressSaved: true });
         }
+    },
+
+    onShow: function () {
+        if (this.data.activeTab === 1) {
+            this.fetchMyTrips();
+        }
+    },
+
+    onTabChange(event) {
+        const tabIndex = event.detail.index;
+        this.setData({ activeTab: tabIndex });
+        if (tabIndex === 1) {
+            this.fetchMyTrips();
+        }
+    },
+
+    fetchMyTrips: function () {
+        wx.showLoading({ title: '加载行程...' });
+        wx.cloud.callFunction({
+            name: 'getMyPackages'
+        }).then(res => {
+            wx.hideLoading();
+            if (res.result && res.result.success) {
+                const { myTrips } = res.result;
+
+                const formatTime = (isoStr) => {
+                    if (!isoStr) return '';
+                    const d = new Date(isoStr);
+                    return `${d.getMonth() + 1}-${d.getDate()} ${d.getHours()}:${d.getMinutes()}`;
+                };
+
+                const formattedTrips = myTrips.map(t => ({
+                    ...t,
+                    createTime_fmt: formatTime(t.createTime)
+                }));
+
+                this.setData({
+                    myTrips: formattedTrips
+                });
+            }
+        }).catch(err => {
+            wx.hideLoading();
+            console.error(err);
+        });
+    },
+
+    onRemoveTrip: function (e) {
+        const tripId = e.target.dataset.id || e.currentTarget.dataset.id;
+        wx.showModal({
+            title: '确认下架',
+            content: '下架后需带货人将无法搜索到此行程。确定下架吗？',
+            confirmColor: '#FF0000',
+            success: (res) => {
+                if (res.confirm) {
+                    wx.showLoading({ title: '下架中...' });
+                    wx.cloud.callFunction({
+                        name: 'removeTrip',
+                        data: { tripId }
+                    }).then(res => {
+                        wx.hideLoading();
+                        if (res.result && res.result.success) {
+                            wx.showToast({ title: '已下架', icon: 'success' });
+                            this.fetchMyTrips(); // Refresh list
+                        } else {
+                            wx.showToast({ title: '下架失败', icon: 'none' });
+                        }
+                    }).catch(err => {
+                        wx.hideLoading();
+                        console.error(err);
+                        wx.showToast({ title: '网络异常', icon: 'none' });
+                    });
+                }
+            }
+        });
     },
 
     handleBack: function () {
@@ -95,9 +172,11 @@ Page({
             const result = res.result;
             if (result && result.success) {
                 wx.showToast({ title: '发布成功', icon: 'success' });
+                // Auto switch to My Trips tab
                 setTimeout(() => {
-                    wx.navigateBack();
-                }, 1500);
+                    this.setData({ activeTab: 1 });
+                    this.fetchMyTrips();
+                }, 1000);
             } else {
                 wx.showToast({ title: '发布失败: ' + (result.msg || '未知错误'), icon: 'none' });
             }

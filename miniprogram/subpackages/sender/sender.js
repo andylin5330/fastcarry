@@ -1,5 +1,8 @@
 Page({
     data: {
+        activeTab: 0,
+        myOrders: [],
+
         categories: ['药物', '电器', '特货(含自用书籍)', '普货', '文件'],
         categoryIndex: null, // Default to null for placeholder
         itemWeight: '',
@@ -24,6 +27,80 @@ Page({
 
     onLoad: function () {
         // Initial setup if needed
+    },
+
+    onShow: function () {
+        if (this.data.activeTab === 1) {
+            this.fetchMyOrders();
+        }
+    },
+
+    onTabChange(event) {
+        const tabIndex = event.detail.index; // van-tabs returns index in event.detail.index or event.detail.name
+        this.setData({ activeTab: tabIndex });
+        if (tabIndex === 1) {
+            this.fetchMyOrders();
+        }
+    },
+
+    fetchMyOrders: function () {
+        wx.showLoading({ title: '加载订单...' });
+        wx.cloud.callFunction({
+            name: 'getMyPackages'
+        }).then(res => {
+            wx.hideLoading();
+            if (res.result && res.result.success) {
+                const { myOrders } = res.result;
+
+                // Simple formatting
+                const formatTime = (isoStr) => {
+                    if (!isoStr) return '';
+                    const d = new Date(isoStr);
+                    return `${d.getMonth() + 1}-${d.getDate()} ${d.getHours()}:${d.getMinutes()}`;
+                };
+
+                const formattedOrders = myOrders.map(o => ({
+                    ...o,
+                    createTime_fmt: formatTime(o.createTime)
+                }));
+
+                this.setData({
+                    myOrders: formattedOrders
+                });
+            }
+        }).catch(err => {
+            wx.hideLoading();
+            console.error(err);
+        });
+    },
+
+    onCancelOrder: function (e) {
+        const orderId = e.target.dataset.id || e.currentTarget.dataset.id;
+        wx.showModal({
+            title: '取消订单',
+            content: '确定要取消这个订单吗？',
+            success: (res) => {
+                if (res.confirm) {
+                    wx.showLoading({ title: '处理中...' });
+                    wx.cloud.callFunction({
+                        name: 'cancelOrder',
+                        data: { orderId }
+                    }).then(res => {
+                        wx.hideLoading();
+                        if (res.result && res.result.success) {
+                            wx.showToast({ title: '已取消', icon: 'success' });
+                            this.fetchMyOrders(); // Refresh list
+                        } else {
+                            wx.showToast({ title: '取消失败', icon: 'none' });
+                        }
+                    }).catch(err => {
+                        wx.hideLoading();
+                        console.error(err);
+                        wx.showToast({ title: '网络异常', icon: 'none' });
+                    });
+                }
+            }
+        });
     },
 
     // Input Handlers
@@ -172,7 +249,11 @@ Page({
             'keyboard', 'mouse', 'charger', 'cable', 'adapter', 'plug',
             'monitor', 'screen', 'display', 'glass',
             'device', 'appliance', 'circuit', 'technology', 'hardware',
-            'case', 'cover', 'protector', 'accessory', 'bumper'
+            'case', 'cover', 'protector', 'accessory', 'bumper',
+            'iphone', 'android', 'smartphone', 'telephone', 'cellular',
+            // Brands & Features
+            'samsung', 'huawei', 'xiaomi', 'oppo', 'vivo', 'pixel', 'oneplus', 'realme', 'honor', 'sony', 'lg', 'nokia', 'motorola',
+            'touch', 'wireless', 'portable', 'handheld', 'digital', 'audio', 'video', 'media', 'internet'
         ];
 
         // 2. Medicine
@@ -320,10 +401,14 @@ Page({
         }).then(res => {
             wx.hideLoading();
             if (res.result && res.result.success) {
-                wx.showToast({ title: '请求已发送', icon: 'success' });
-                setTimeout(() => {
-                    wx.switchTab({ url: '/pages/packages/packages' });
-                }, 1500);
+                wx.showToast({
+                    title: '请求已发送',
+                    icon: 'success'
+                })
+                // Auto switch to My Shipments tab
+                this.setData({ activeTab: 1 });
+                this.fetchMyOrders();
+
             } else {
                 const errorMsg = res.result.msg || (res.result.error ? res.result.error.errMsg : '未知错误');
                 wx.showToast({ title: '失败: ' + errorMsg, icon: 'none', duration: 3000 });

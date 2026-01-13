@@ -1,9 +1,14 @@
 {
-  "usingComponents": {},
+  "usingComponents": {
+    "van-grid": "@vant/weapp/grid/index",
+    "van-grid-item": "@vant/weapp/grid-item/index",
+    "van-icon": "@vant/weapp/icon/index",
+    "van-image": "@vant/weapp/image/index"
+  },
   "navigationBarTitleText": "速带",
-  "navigationBarBackgroundColor": "#1eb1f7",
+  "navigationBarBackgroundColor": "#fff",
   "navigationBarTextStyle": "black",
   "enablePullDownRefresh": false,
-  "backgroundColor": "#00FFFF",
+  "backgroundColor": "#f7f8fa",
   "backgroundTextStyle": "light"
 }

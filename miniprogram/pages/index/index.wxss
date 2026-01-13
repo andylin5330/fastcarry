@@ -1,35 +1,64 @@
 /* Global */
-.container {
-  min-height: 100vh;
+page {
   background-color: #f7f8fa;
+  min-height: 100vh;
 }
 
-/* Header Background (Blue) */
-.header-bg {
-  background-color: #1eb1f7;
-  height: 250rpx;
-  position: absolute;
-  top: 0;
-  width: 100%;
-  z-index: 1;
-  border-bottom-left-radius: 120rpx;
-  border-bottom-right-radius: 120rpx;
+.container {
+  padding-bottom: 40rpx;
 }
 
-/* Banner Wrapper */
-.banner-wrapper {
-  padding: 20rpx;
-  padding-top: 40rpx; /* Push down relative to container */
+/* --- Gradient Header --- */
+.header-section {
+  background: linear-gradient(135deg, #1eb1f7, #6149f6);
+  padding: 20rpx 20rpx 267rpx; /* Extra bottom padding for overlap */
+  border-bottom-left-radius: 40rpx;
+  border-bottom-right-radius: 40rpx;
+}
+
+.search-box {
+  /* Ensure search bar looks integrated */
+}
+/* Override Vant search background to be transparent to show gradient */
+.van-search {
+  padding: 0 !important;
+  background: transparent !important;
+}
+.van-search__content {
+  background-color: rgba(255, 255, 255, 0.2) !important; 
+}
+.van-field__input {
+  color: #fff !important;
+}
+.van-icon-search {
+  color: #fff !important;
+}
+input-placeholder {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+
+/* --- Floating Main Card --- */
+.main-card {
+  margin: -250rpx 30rpx 0; /* Uplift to overlap header */
   position: relative;
-  z-index: 2;
-  margin-bottom: 20rpx;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 30rpx;
+}
+
+/* Banner */
+.banner-wrapper {
+  border-radius: 20rpx;
+  overflow: hidden;
+  box-shadow: 0 8rpx 20rpx rgba(0, 0, 0, 0.1);
+  background: #fff;
 }
 
 .swiper-box {
   height: 300rpx;
-  border-radius: 20rpx;
-  overflow: hidden;
-  box-shadow: 0 8rpx 20rpx rgba(30, 177, 247, 0.3);
+  width: 100%;
 }
 
 .banner-img {
@@ -41,11 +70,8 @@
 /* Navigation Grid */
 .nav-grid {
   background-color: #fff;
-  margin: 0 20rpx 30rpx;
-  padding: 20rpx 0;
   border-radius: 20rpx;
-  position: relative;
-  z-index: 2;
+  padding: 20rpx 0;
   box-shadow: 0 4rpx 10rpx rgba(0,0,0,0.05);
 }
 
@@ -62,36 +88,66 @@
   color: #333;
 }
 
-/* Main Action Cards */
-.main-actions {
-  padding: 0 20rpx;
-  display: flex;
-  justify-content: space-between;
-  gap: 20rpx;
-  position: relative;
-  z-index: 2;
-}
-
-.action-card {
-  flex: 1;
-  height: 160rpx;
-  border-radius: 20rpx;
+/* Role Actions (Sender/Carrier) */
+.role-actions {
   display: flex;
   flex-direction: column;
+  gap: 24rpx;
+}
+
+.role-card {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 10rpx;
+  padding: 30rpx 40rpx;
+  border-radius: 24rpx;
   color: #fff;
-  box-shadow: 0 6rpx 15rpx rgba(0,0,0,0.1);
+  box-shadow: 0 6rpx 16rpx rgba(0,0,0,0.1);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s ease;
 }
 
-.action-title { font-size: 32rpx; font-weight: bold; }
-.action-desc { font-size: 22rpx; opacity: 0.9; }
-
-.carrier {
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+.card-hover {
+  transform: translateY(2rpx);
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.1);
 }
 
-.sender {
-  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+.carrier-card {
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+}
+
+.sender-card {
+  background: linear-gradient(135deg, #43e97b, #38f9d7);
+}
+
+.role-icon-bg {
+  width: 80rpx;
+  height: 80rpx;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 30rpx;
+}
+
+.role-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.role-title {
+  font-size: 34rpx;
+  font-weight: bold;
+  margin-bottom: 6rpx;
+}
+
+.role-desc {
+  font-size: 24rpx;
+  opacity: 0.9;
+}
+
+.arrow-icon {
+  opacity: 0.8;
 }

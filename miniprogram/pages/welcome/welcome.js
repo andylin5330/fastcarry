@@ -5,50 +5,42 @@ Page({
    * Page initial data
    */
   data: {
-    second:3,
-    img:'/images/bg/splash.png'
+    second: 3,
+    img: 'cloud://cloud1-1g75i69o3bf03886.636c-cloud1-1g75i69o3bf03886-1394854433/bg/splash.png'
   },
-  doJump(){
-    //电击就跳转的首页
+  onLoad(options) {
+    this.timer = setInterval(() => {
+      let sec = this.data.second;
+      if (sec <= 1) {
+        this.doJump();
+      } else {
+        this.setData({
+          second: sec - 1
+        });
+      }
+    }, 1000);
+  },
+
+  onUnload() {
+    if (this.timer) {
+      clearInterval(this.timer);
+      this.timer = null;
+    }
+  },
+
+  doJump() {
+    if (this.timer) {
+      clearInterval(this.timer);
+      this.timer = null;
+    }
+    // Check if we are already switching
     wx.switchTab({
       url: '/pages/index/index',
-    })
-  },
-
-  onLoad(options){
-    wx.request({
-      url:'http://127.0.0.1:8000/fastcarry/welcome/',
-      method:'GET',
-      success:(res)=>{
-        if(res.data.code==100){
-          this.setData({
-            img:res.data.result
-          })
-        }else{
-          wx.showToast({
-            title: '网络请求异常',
-          })
-        }
+      fail: (err) => {
+        // In case it's not a tab bar (though it is), fallback or log
+        console.error("Switch tab failed", err);
       }
     })
-
-    //启动定时器，倒计时
-    //清除定时器
-    var instance=setInterval(()=>{
-      if(this.data.second<=0){
-        clearInterval(instance)
-
-        wx.switchTab({
-          url: '/pages/index/index',
-        })
-      }
-      else{
-        this.setData({
-          second:this.data.second-1
-        })
-      }
-      
-    },1000)
   }
 
 })

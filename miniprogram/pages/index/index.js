@@ -14,12 +14,12 @@ Page({
 
     navigateToCarrier() {
         wx.navigateTo({
-            url: '/pages/carrier/carrier',
+            url: '/subpackages/carrier/carrier',
         })
     },
     navigateToSender() {
         wx.navigateTo({
-            url: '/pages/sender/sender',
+            url: '/subpackages/sender/sender',
         })
     }
 })

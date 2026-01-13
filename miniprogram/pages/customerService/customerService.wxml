@@ -1,0 +1,29 @@
+<view class="container">
+  <view class="header-section">
+    <image class="cs-image" src="/images/customer-service.png" mode="aspectFit" />
+    <view class="title">我们可以为您做什么？</view>
+    <view class="subtitle">遇到问题？请联系我们的在线客服</view>
+  </view>
+
+  <view class="action-area">
+    <van-button 
+      type="primary" 
+      block 
+      round 
+      size="large" 
+      open-type="contact" 
+      color="linear-gradient(to right, #1eb1f7, #6149f6)"
+    >
+      <van-icon name="service" style="margin-right: 10rpx;" />
+      联系在线客服
+    </van-button>
+  </view>
+
+  <view class="faq-section">
+    <van-cell-group title="常见问题" inset>
+      <van-cell title="如何取消订单？" is-link label="请在“我寄送的”或“我发布的”列表中操作" />
+      <van-cell title="违禁品包含哪些？" is-link label="请参考禁带物品清单" />
+      <van-cell title="支付安全保障" is-link />
+    </van-cell-group>
+  </view>
+</view>

@@ -63,7 +63,7 @@ Page({
 
         if (data.code === 100) {
           const { userInfo } = data
-          app.initUserInfo(userInfo.name, userInfo.score, userInfo.avatar, 'CLOUD_AUTH')
+          app.initUserInfo(userInfo.name, userInfo.score, userInfo.avatar, 'CLOUD_AUTH', userInfo._id, userInfo.uid)
           this.setData({
             userInfo: app.globalData.userInfo
           })
@@ -158,6 +158,45 @@ Page({
       })
     }
   },
+
+  handleClearCache() {
+    wx.showModal({
+      title: '清除缓存',
+      content: '确定要清除所有本地缓存吗？',
+      success: (res) => {
+        if (res.confirm) {
+          try {
+            wx.clearStorageSync()
+            // Do NOT reset userInfo, keep user logged in
+            wx.showToast({
+              title: '缓存已清除',
+              icon: 'success'
+            })
+          } catch (e) {
+            console.error('Clear cache failed', e)
+            wx.showToast({
+              title: '清除失败',
+              icon: 'none'
+            })
+          }
+        }
+      }
+    })
+  },
+
+  handleCopyID() {
+    const uid = this.data.userInfo.uid || '221526'
+    wx.setClipboardData({
+      data: uid.toString(),
+      success: () => {
+        wx.showToast({
+          title: 'ID已复制',
+          icon: 'success'
+        })
+      }
+    })
+  },
+
   handleLogout() {
     // 1 调用app.js 的退出
     app.logoutUserInfo()

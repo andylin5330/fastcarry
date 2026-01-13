@@ -26,42 +26,54 @@
 
 </block>
 <block wx:else>
-  <view class="container">
-    <view class="top-view">
-      <view class="user">
-        <view class="row">
-          <image class="avatar" src="{{avatarUrl}}"></image>
-          <view class="name">
-            <view bindtap="handleLogout">{{userInfo.name}}</view>
-          </view>
-        </view>
-
-      </view>
-      <view class="numbers">
-        <view class="row">
-          <text>{{userInfo.score}}</text>
-          <text>积分</text>
-        </view>
-        <view class="row">
-          <text>55</text>
-          <text>其他</text>
-        </view>
-        <view class="row">
-          <text>77</text>
-          <text>其他</text>
-        </view>
-        <view class="row">
-          <text>56</text>
-          <text>其他</text>
+  <view class="container profile-container">
+    <!-- Header Card -->
+    <view class="header-card">
+      <view class="user-info">
+        <van-image width="120rpx" height="120rpx" src="{{avatarUrl}}" round fit="cover" custom-class="avatar-shadow" />
+        <view class="text-info">
+          <view class="user-name">{{userInfo.name}}</view>
+          <view class="user-id" bindtap="handleCopyID">ID: {{userInfo.uid || '221526'}}</view>
         </view>
       </view>
     </view>
-    <van-list>
-      <van-cell title="积分兑换记录" is-link />
-      <van-cell title="我参加的活动" is-link />
-      <van-cell title="分享应用" is-link />
-      <van-cell title="联系客服" is-link />
-      <van-cell title="退出" is-link bind:tap="handleLogout"/>
-    </van-list>
+
+    <!-- Stats Grid -->
+    <view class="stats-card">
+      <van-grid column-num="4" border="{{ false }}">
+        <van-grid-item use-slot>
+          <view class="stat-value">{{userInfo.score || 0}}</view>
+          <view class="stat-label">积分</view>
+        </van-grid-item>
+        <van-grid-item use-slot>
+          <view class="stat-value">0</view>
+          <view class="stat-label">优惠券</view>
+        </van-grid-item>
+        <van-grid-item use-slot>
+          <view class="stat-value">0</view>
+          <view class="stat-label">关注</view>
+        </van-grid-item>
+        <van-grid-item use-slot>
+          <view class="stat-value">0</view>
+          <view class="stat-label">足迹</view>
+        </van-grid-item>
+      </van-grid>
+    </view>
+
+    <!-- Menu List -->
+    <view class="menu-card">
+      <van-cell-group inset>
+        <van-cell title="地址管理" is-link icon="location-o" />
+        <van-cell title="积分兑换记录" is-link icon="gold-coin-o" />
+        <van-cell title="我参加的活动" is-link icon="flag-o" />
+        <van-cell title="分享应用" is-link icon="share-o" />
+        <van-cell title="清除缓存" is-link border="{{ false }}" bind:click="handleClearCache" icon="delete-o" />
+      </van-cell-group>
+    </view>
+
+    <view class="logout-area">
+      <van-button type="default" block round custom-style="color: #ee0a24;" bind:click="handleLogout">退出登录</van-button>
+    </view>
+
   </view>
 </block>
