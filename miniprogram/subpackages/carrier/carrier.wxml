@@ -104,26 +104,23 @@
     <van-tab title="我发布的">
       <view class="content-area" style="padding: 24rpx;">
           <block wx:if="{{myTrips.length > 0}}">
-             <view class="card-wrap" wx:for="{{myTrips}}" wx:key="_id" style="margin-bottom: 24rpx;">
-                <van-card
-                    tag="发布中"
-                    desc="余量: {{item.details.weight}}KG"
-                    title="航班: {{item.flightNo}}"
-                    thumb="/images/icons/delivering.png"
-                >
-                     <view slot="tags">
-                        <van-tag type="danger" style="margin-right: 10rpx;">{{item.route}}</van-tag>
-                    </view>
-                    <view slot="footer">
-                         <text class="date-text" style="font-size: 24rpx; color: #999; margin-right: 20rpx;">{{item.createTime_fmt}}</text>
-                        <van-button 
-                            size="mini" 
-                            type="danger" 
-                            bind:click="onRemoveTrip" 
-                            data-id="{{item._id}}"
-                        >下架</van-button>
-                    </view>
-                </van-card>
+             <view class="form-card" wx:for="{{myTrips}}" wx:key="_id" style="margin-bottom: 24rpx;">
+                <view class="section-title">行程: {{item.flightNo}}</view>
+                <van-cell-group border="{{ false }}">
+                  <van-cell title="路线" value="{{item.route}}" border="{{ false }}" icon="location-o" />
+                  <van-cell title="余量" value="{{item.details.weight}}KG" border="{{ false }}" icon="bag-o" />
+                  <van-cell title="发布时间" value="{{item.createTime_fmt}}" border="{{ false }}" />
+                </van-cell-group>
+                <view class="footer-btn" style="padding-top: 20rpx; display: flex; justify-content: flex-end;">
+                  <van-button 
+                      size="small" 
+                      type="danger" 
+                      plain
+                      round
+                      bind:click="onRemoveTrip" 
+                      data-id="{{item._id}}"
+                  >下架行程</van-button>
+                </view>
              </view>
           </block>
           <block wx:else>

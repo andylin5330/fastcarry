@@ -119,30 +119,27 @@
     <van-tab title="我寄送的">
       <view class="content-area" style="padding: 24rpx;">
         <block wx:if="{{myOrders.length > 0}}">
-            <view class="card-wrap" wx:for="{{myOrders}}" wx:key="_id" style="margin-bottom: 24rpx;">
-                <van-card
-                    tag="{{item.status}}"
-                    price="待议"
-                    desc="路线: {{item.route}}"
-                    title="航班: {{item.flightNo}}"
-                    thumb="/images/icons/box.png" 
-                >
-                    <view slot="tags">
-                        <van-tag plain type="primary" style="margin-right: 10rpx;">重量: {{item.weight}}KG</van-tag>
-                        <van-tag plain type="warning">备注: {{item.note}}</van-tag>
-                    </view>
-                    <view slot="footer">
-                        <text class="date-text" style="font-size: 24rpx; color: #999; margin-right: 20rpx;">{{item.createTime_fmt}}</text>
-                        <van-button 
-                          wx:if="{{item.status !== 'cancelled'}}" 
-                          size="mini" 
-                          plain 
-                          type="warning" 
-                          bind:click="onCancelOrder" 
-                          data-id="{{item._id}}"
-                        >取消订单</van-button>
-                    </view>
-                </van-card>
+            <view class="form-card" wx:for="{{myOrders}}" wx:key="_id" style="margin-bottom: 24rpx;" bindtap="onViewOrderDetail" data-id="{{item._id}}">
+                <view style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20rpx;">
+                  <view class="section-title" style="margin-bottom: 0;">订单: {{item.flightNo}}</view>
+                  <van-tag type="{{item.status === 'cancelled' ? 'default' : 'primary'}}">{{item.status}}</van-tag>
+                </view>
+                <van-cell-group border="{{ false }}">
+                  <van-cell title="路线" value="{{item.route}}" border="{{ false }}" icon="location-o" />
+                  <van-cell title="重量" value="{{item.weight}}KG" border="{{ false }}" icon="bag-o" />
+                  <van-cell title="报价" value="待议" border="{{ false }}" />
+                  <van-cell wx:if="{{item.note}}" title="备注" label="{{item.note}}" border="{{ false }}" icon="notes-o" />
+                </van-cell-group>
+                <view class="footer-btn" style="padding-top: 20rpx; display: flex; justify-content: flex-end;" wx:if="{{item.status !== 'cancelled'}}">
+                  <van-button 
+                    size="small" 
+                    plain 
+                    round
+                    type="warning" 
+                    bind:click="onCancelOrder" 
+                    data-id="{{item._id}}"
+                  >取消订单</van-button>
+                </view>
             </view>
         </block>
         <block wx:else>

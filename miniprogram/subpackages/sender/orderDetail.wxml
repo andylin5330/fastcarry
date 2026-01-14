@@ -1,0 +1,48 @@
+<view class="container">
+  <!-- Journey Section -->
+  <view class="form-card">
+    <view class="section-title">旅程信息</view>
+    <van-cell-group border="{{ false }}">
+      <van-cell title="航班号" value="{{ order.flightNo }}" border="{{ false }}" />
+      <van-cell title="路线" value="{{ order.route }}" border="{{ false }}" />
+      <van-cell title="状态" border="{{ false }}">
+        <view slot="right-icon">
+          <van-tag type="primary">{{ order.status }}</van-tag>
+        </view>
+      </van-cell>
+    </van-cell-group>
+  </view>
+
+  <!-- Items Section -->
+  <view class="form-card">
+    <view class="section-title">物品信息</view>
+    <van-cell-group border="{{ false }}">
+      <van-cell title="重量" value="{{ order.weight }}KG" border="{{ false }}" />
+      <van-cell title="分类" value="{{ order.senderNote || '普货' }}" border="{{ false }}" />
+      <van-cell title="备注" label="{{ order.note || '无' }}" border="{{ false }}" />
+    </van-cell-group>
+  </view>
+
+  <!-- Recipient Section -->
+  <view class="form-card">
+    <view class="section-title">收件信息</view>
+    <van-cell-group border="{{ false }}">
+      <van-cell title="收件人" value="{{ order.recipientName || '未填写' }}" border="{{ false }}" />
+      <van-cell title="联系电话" value="{{ order.recipientPhone || '未填写' }}" border="{{ false }}" />
+      <van-cell title="收件地址" label="{{ order.recipientAddress || '未填写' }}" border="{{ false }}" />
+    </van-cell-group>
+  </view>
+
+  <!-- Tracking Section -->
+  <view class="form-card">
+    <view class="section-title">状态追踪</view>
+    <view class="steps-container">
+      <van-steps
+        steps="{{ steps }}"
+        active="{{ activeStep }}"
+        direction="vertical"
+        active-color="#1eb1f7"
+      />
+    </view>
+  </view>
+</view>

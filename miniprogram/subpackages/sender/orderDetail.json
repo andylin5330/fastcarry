@@ -1,0 +1,14 @@
+{
+    "usingComponents": {
+        "van-cell": "@vant/weapp/cell/index",
+        "van-cell-group": "@vant/weapp/cell-group/index",
+        "van-steps": "@vant/weapp/steps/index",
+        "van-tag": "@vant/weapp/tag/index",
+        "van-icon": "@vant/weapp/icon/index"
+    },
+    "navigationBarTitleText": "订单详情",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTextStyle": "black",
+    "enablePullDownRefresh": false,
+    "backgroundTextStyle": "light"
+}

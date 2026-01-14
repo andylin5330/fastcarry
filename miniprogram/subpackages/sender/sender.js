@@ -422,6 +422,13 @@ Page({
     },
 
     // View Details or Subscribe (Keep as fallback)
+    onViewOrderDetail: function (e) {
+        const id = e.currentTarget.dataset.id;
+        wx.navigateTo({
+            url: `/subpackages/sender/orderDetail?id=${id}`
+        });
+    },
+
     onSubscribeRoute: function () {
         wx.showToast({ title: '订阅成功', icon: 'success' });
     }

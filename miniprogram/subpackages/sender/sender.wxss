@@ -251,3 +251,22 @@
 .location-icon {
     padding-left: 10rpx;
 }
+/* Form Cards */
+.form-card {
+  background-color: #ffffff;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.02);
+  overflow: hidden;
+}
+
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+  border-left: 8rpx solid #1eb1f7;
+  padding-left: 15rpx;
+}
