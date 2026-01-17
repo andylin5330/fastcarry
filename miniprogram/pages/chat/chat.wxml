@@ -1,0 +1,44 @@
+<view class="container">
+  <scroll-view 
+    class="chat-scroll" 
+    scroll-y 
+    scroll-into-view="{{ scrollToView }}"
+    scroll-with-animation
+    enable-back-to-top
+  >
+    <block wx:for="{{ messages }}" wx:key="_id">
+      <!-- System Message (e.g., FAQ) -->
+      <view class="system-msg" wx:if="{{ item.type === 'system' }}" id="msg-{{ index }}">
+        {{ item.content }}
+      </view>
+
+      <!-- Chat Bubble -->
+      <view class="message-item {{ item.senderId === myOpenid ? 'me' : 'not-me' }}" wx:else id="msg-{{ index }}">
+        <image class="avatar" src="{{ item.senderId === myOpenid ? myAvatar : otherAvatar }}" />
+        <view class="content-box {{ item.type === 'typing' ? 'typing-indicator' : '' }}">
+          <text>{{ item.content }}</text>
+        </view>
+      </view>
+    </block>
+    <view id="bottom-anchor" style="height: 1rpx;"></view>
+  </scroll-view>
+
+  <view class="input-area">
+    <input 
+      class="input-field" 
+      placeholder="输入消息..." 
+      value="{{ inputValue }}"
+      confirm-type="send"
+      bindinput="onInput"
+      bindconfirm="sendMessage"
+    />
+    <van-button 
+      type="primary" 
+      size="small" 
+      round 
+      custom-class="send-btn"
+      bind:click="sendMessage"
+      disabled="{{ !inputValue }}"
+    >发送</van-button>
+  </view>
+</view>

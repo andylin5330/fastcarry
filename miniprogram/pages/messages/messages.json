@@ -3,9 +3,11 @@
         "van-button": "@vant/weapp/button/index",
         "van-icon": "@vant/weapp/icon/index",
         "van-cell": "@vant/weapp/cell/index",
-        "van-cell-group": "@vant/weapp/cell-group/index"
+        "van-cell-group": "@vant/weapp/cell-group/index",
+        "van-image": "@vant/weapp/image/index",
+        "van-tag": "@vant/weapp/tag/index"
     },
-    "navigationBarTitleText": "客服中心",
+    "navigationBarTitleText": "消息",
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTextStyle": "black"
 }

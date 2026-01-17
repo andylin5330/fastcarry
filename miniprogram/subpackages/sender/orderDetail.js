@@ -1,3 +1,5 @@
+const app = getApp();
+
 Page({
     data: {
         orderId: '',
@@ -22,15 +24,11 @@ Page({
 
     fetchOrderDetail: function (id) {
         wx.showLoading({ title: '加载中...' });
-        // In a real app, you would call a cloud function here
-        // For now, we simulate with database query or mock
         const db = wx.cloud.database();
         db.collection('orders').doc(id).get().then(res => {
             wx.hideLoading();
             const order = res.data;
 
-            // Calculate active step based on order status fields
-            // This logic will depend on how your database stores these flags
             let activeStep = 0;
             if (order.isSigned) activeStep = 5;
             else if (order.isLanded) activeStep = 4;
@@ -47,6 +45,59 @@ Page({
             wx.hideLoading();
             console.error('Fetch order detail failed', err);
             wx.showToast({ title: '加载失败', icon: 'none' });
+        });
+    },
+
+    onContactCarrier: function () {
+        const { order } = this.data;
+        if (!order || !order._openid) {
+            wx.showToast({ title: '无法获取带物人信息', icon: 'none' });
+            return;
+        }
+
+        if (!app.globalData.userInfo) {
+            wx.showToast({ title: '请先登录', icon: 'none' });
+            return;
+        }
+
+        const myId = app.globalData.userInfo._id;
+        const otherId = order._openid;
+
+        if (myId === otherId) {
+            wx.showToast({ title: '不能跟自己聊天哦', icon: 'none' });
+            return;
+        }
+
+        const db = wx.cloud.database();
+        const _ = db.command;
+
+        db.collection('conversations')
+            .where({
+                participants: _.all([myId, otherId])
+            })
+            .get()
+            .then(res => {
+                if (res.data.length > 0) {
+                    this.goToChat(res.data[0]._id);
+                } else {
+                    db.collection('conversations').add({
+                        data: {
+                            participants: [myId, otherId],
+                            lastUpdate: db.serverDate(),
+                            lastMessage: { content: '我发起了一个咨询', timestamp: db.serverDate() },
+                            type: 'user',
+                            unreadCount: 0
+                        }
+                    }).then(addRes => {
+                        this.goToChat(addRes._id);
+                    });
+                }
+            });
+    },
+
+    goToChat: function (id) {
+        wx.navigateTo({
+            url: `/pages/chat/chat?id=${id}&type=user`
         });
     }
 });

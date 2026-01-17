@@ -34,7 +34,7 @@
   </view>
 
   <!-- Tracking Section -->
-  <view class="form-card">
+  <view class="form-card" style="margin-bottom: 120rpx;">
     <view class="section-title">状态追踪</view>
     <view class="steps-container">
       <van-steps
@@ -45,4 +45,20 @@
       />
     </view>
   </view>
+
+  <!-- Bottom Actions -->
+  <view class="bottom-actions">
+    <van-button 
+      type="primary" 
+      block 
+      round 
+      bind:click="onContactCarrier"
+      color="linear-gradient(to right, #1eb1f7, #6149f6)"
+    >
+      <van-icon name="chat-o" style="margin-right: 10rpx;" />
+      联系带物人
+    </van-button>
+  </view>
+
+  <van-dialog id="van-dialog" />
 </view>

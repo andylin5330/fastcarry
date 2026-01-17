@@ -3,7 +3,8 @@
     "pages/welcome/welcome",
     "pages/index/index",
     "pages/me/me",
-    "pages/messages/messages"
+    "pages/messages/messages",
+    "pages/chat/chat"
   ],
   "subPackages": [
     {

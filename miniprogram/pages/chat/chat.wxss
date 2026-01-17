@@ -1,0 +1,99 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #f4f4f4;
+}
+
+.chat-scroll {
+  flex: 1;
+  height: 100%;
+  padding: 20rpx;
+  padding-bottom: 100rpx;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.message-item {
+  display: flex;
+  margin-bottom: 30rpx;
+  align-items: flex-start;
+}
+
+.message-item.me {
+  flex-direction: row-reverse;
+}
+
+.avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 10rpx;
+}
+
+.content-box {
+  max-width: 60%;
+  margin: 0 20rpx;
+  padding: 20rpx;
+  border-radius: 10rpx;
+  font-size: 28rpx;
+  line-height: 1.5;
+  word-break: break-all;
+  position: relative;
+}
+
+.message-item.not-me .content-box {
+  background: #fff;
+  color: #333;
+}
+
+.message-item.me .content-box {
+  background: #1eb1f7;
+  color: #fff;
+}
+
+.input-area {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  padding: 20rpx 30rpx;
+  display: flex;
+  align-items: center;
+  border-top: 1rpx solid #eee;
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+  z-index: 100;
+}
+
+.input-field {
+  flex: 1;
+  background: #f7f8fa;
+  border-radius: 40rpx;
+  padding: 15rpx 30rpx;
+  margin-right: 20rpx;
+  font-size: 28rpx;
+  line-height: 1.5;
+  min-height: 40rpx;
+}
+
+.send-btn {
+  margin-left: 10rpx;
+}
+
+.system-msg {
+  text-align: center;
+  font-size: 24rpx;
+  color: #999;
+  margin: 20rpx 0;
+}
+
+.typing-indicator {
+  display: inline-block;
+  animation: blink 1.4s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}

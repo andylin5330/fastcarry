@@ -1,36 +1,44 @@
 <view class="container">
-  <!-- Header Section -->
-  <view class="header-card" style="text-align: center; padding: 60rpx 40rpx; background: #fff; margin-bottom: 30rpx;">
-    <van-image width="160rpx" height="160rpx" src="/images/chat.png" round fit="cover" />
-    <view style="font-size: 36rpx; font-weight: bold; color: #333; margin-top: 30rpx;">我们可以为您做什么？</view>
-    <view style="font-size: 26rpx; color: #999; margin-top: 10rpx;">遇到问题？请联系我们的在线客服</view>
-  </view>
+  <van-cell-group border="{{ false }}">
+    <!-- System AI Chat Item -->
+    <van-cell 
+      title="AI 智能客服" 
+      label="{{ aiLastMessage || '点击开始咨询常见问题' }}" 
+      center 
+      clickable 
+      bind:click="goToAiChat"
+    >
+      <view slot="icon" style="margin-right: 20rpx;">
+        <van-image width="100rpx" height="100rpx" src="/images/ai_avatar.png" round />
+      </view>
+      <view slot="right-icon">
+        <van-tag type="danger" round wx:if="{{ aiUnreadCount > 0 }}">{{ aiUnreadCount }}</van-tag>
+      </view>
+    </van-cell>
 
-  <!-- Contact Action -->
-  <view class="form-card">
-    <view class="section-title">由于政策原因，请联系在线人工客服</view>
-    <view style="padding: 20rpx 0;">
-      <van-button 
-        type="primary" 
-        block 
-        round 
-        size="large" 
-        open-type="contact" 
-        color="linear-gradient(to right, #1eb1f7, #6149f6)"
+    <!-- User Conversations -->
+    <block wx:for="{{ conversations }}" wx:key="_id">
+      <van-cell 
+        title="{{ item.otherPartyName }}" 
+        label="{{ item.lastMessage.content }}" 
+        center 
+        clickable 
+        data-id="{{ item._id }}"
+        bind:click="goToChat"
       >
-        <van-icon name="service-o" style="margin-right: 10rpx;" />
-        连接在线客服
-      </van-button>
-    </view>
-  </view>
+        <view slot="icon" style="margin-right: 20rpx;">
+          <van-image width="100rpx" height="100rpx" src="{{ item.otherPartyAvatar || '/images/default_avatar.png' }}" round />
+        </view>
+        <view slot="right-icon">
+          <view class="time-label">{{ item.lastMessageTime }}</view>
+          <van-tag type="danger" round wx:if="{{ item.unreadCount > 0 }}">{{ item.unreadCount }}</van-tag>
+        </view>
+      </van-cell>
+    </block>
+  </van-cell-group>
 
-  <!-- FAQ Section -->
-  <view class="form-card">
-    <view class="section-title">常见问题</view>
-    <van-cell-group border="{{ false }}">
-      <van-cell title="如何取消订单？" label="请在“我寄送的”或“我发布的”列表中操作" is-link border="{{ false }}" />
-      <van-cell title="违禁品包含哪些？" label="请参考禁带物品清单" is-link border="{{ false }}" />
-      <van-cell title="支付安全保障" label="我们提供担保交易，确保资金安全" is-link border="{{ false }}" />
-    </van-cell-group>
+  <!-- Empty State -->
+  <view class="empty-container" wx:if="{{ conversations.length === 0 && !aiLastMessage }}">
+    <view class="empty-text">暂无消息</view>
   </view>
 </view>
