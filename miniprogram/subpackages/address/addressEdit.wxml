@@ -1,0 +1,101 @@
+<view class="container">
+  <van-cell-group>
+    <van-field
+      label="姓名"
+      placeholder="收货人姓名"
+      value="{{ name }}"
+      bind:change="onNameChange"
+    />
+    <van-field
+      label="电话"
+      placeholder="联系电话"
+      type="number"
+      value="{{ phone }}"
+      bind:change="onPhoneChange"
+    />
+    <van-cell
+      title="国家"
+      is-link
+      value="{{ country || '请选择国家' }}"
+      bind:click="showCountryPopup"
+    />
+    <van-cell
+      title="省市区"
+      is-link
+      value="{{ regionText || '选择省/市/区' }}"
+      bind:click="showAreaPopup"
+    />
+    <van-field
+      label="街道名"
+      placeholder="Street Name"
+      value="{{ street }}"
+      bind:change="onStreetChange"
+    />
+    <view class="row-fields">
+      <van-field
+        label="楼号"
+        placeholder="Building #"
+        value="{{ building }}"
+        bind:change="onBuildingChange"
+        custom-style="flex: 1"
+      />
+      <van-field
+        label="单元/Apt"
+        placeholder="Unit/Apt"
+        value="{{ apt }}"
+        bind:change="onAptChange"
+        custom-style="flex: 1"
+      />
+    </view>
+    <van-field
+      label="邮编"
+      placeholder="Postcode"
+      value="{{ postcode }}"
+      bind:change="onPostcodeChange"
+    />
+    <van-field
+      label="备注"
+      placeholder="其他信息"
+      type="textarea"
+      autosize
+      value="{{ detail }}"
+      bind:change="onDetailChange"
+    />
+  </van-cell-group>
+
+  <van-cell-group custom-class="mt-20">
+    <van-cell title="设置为默认收货地址" center>
+      <van-switch checked="{{ isDefault }}" bind:change="onDefaultChange" size="24px" />
+    </van-cell>
+  </van-cell-group>
+
+  <view class="btn-group">
+    <van-button 
+      block 
+      round 
+      bind:click="saveAddress" 
+      custom-class="btn-gradient"
+    >
+      保存
+    </van-button>
+    <van-button wx:if="{{ id }}" type="default" block round custom-class="mt-20" bind:click="deleteAddress">删除</van-button>
+  </view>
+
+  <van-popup show="{{ showCountryPicker }}" position="bottom" bind:close="hideCountryPopup">
+    <van-picker
+      show-toolbar
+      columns="{{ countries }}"
+      bind:confirm="onCountryConfirm"
+      bind:cancel="hideCountryPopup"
+    />
+  </van-popup>
+
+  <van-popup show="{{ showArea }}" position="bottom" bind:close="hideAreaPopup">
+    <van-area
+      area-list="{{ areaList }}"
+      value="{{ areaCode }}"
+      bind:confirm="onAreaConfirm"
+      bind:cancel="hideAreaPopup"
+    />
+  </van-popup>
+</view>

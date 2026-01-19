@@ -22,13 +22,37 @@ Page({
         }
     },
 
-    fetchOrderDetail: function (id) {
+    fetchOrderDetail: async function (id) {
         wx.showLoading({ title: '加载中...' });
         const db = wx.cloud.database();
-        db.collection('orders').doc(id).get().then(res => {
-            wx.hideLoading();
-            const order = res.data;
+        try {
+            // 1. Fetch Order
+            const orderRes = await db.collection('orders').doc(id).get();
+            const order = orderRes.data;
 
+            // 2. Fetch Trip (for carryingNo and receiving address)
+            const tripRes = await db.collection('trips').doc(order.tripId).get();
+            const trip = tripRes.data;
+
+            // 3. Enrich order data for UI
+            order.carryingNo = trip ? trip.carryingNo : '未知';
+
+            // Fallback: If trip record has userName, use it
+            if (trip && trip.userName) {
+                order.recipientName = trip.userName;
+            } else if (trip && trip.carrierName) {
+                order.recipientName = trip.carrierName;
+            } else {
+                const userRes = await db.collection('users').where({
+                    openid: order.carrierId
+                }).get();
+                order.recipientName = userRes.data.length > 0 ? userRes.data[0].name : '带货人';
+            }
+
+            order.recipientAddress = trip ? trip.address : '未设置';
+            order.recipientPhone = '请通过在线咨询获取'; // Privacy
+
+            // 4. Calculate step
             let activeStep = 0;
             if (order.isSigned) activeStep = 5;
             else if (order.isLanded) activeStep = 4;
@@ -41,11 +65,12 @@ Page({
                 order: order,
                 activeStep: activeStep
             });
-        }).catch(err => {
+            wx.hideLoading();
+        } catch (err) {
             wx.hideLoading();
             console.error('Fetch order detail failed', err);
-            wx.showToast({ title: '加载失败', icon: 'none' });
-        });
+            wx.showToast({ title: '订单信息不完整', icon: 'none' });
+        }
     },
 
     onContactCarrier: function () {

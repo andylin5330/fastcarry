@@ -1,3 +1,6 @@
+const app = getApp();
+const db = wx.cloud.database();
+
 Page({
     data: {
         activeTab: 0,
@@ -157,7 +160,8 @@ Page({
                 weight: this.data.remainingWeight,
                 volume: this.data.volumeRatio
             } : {},
-            address: this.data.address
+            address: this.data.address,
+            createTime: db.serverDate()
         };
 
         // Call Cloud Function
@@ -185,5 +189,60 @@ Page({
             console.error('Cloud function fail:', err);
             wx.showToast({ title: '网络异常', icon: 'none' });
         });
+    },
+
+    onSelectSavedAddress: async function () {
+        if (!app.globalData.userInfo) {
+            wx.showModal({
+                title: '提示',
+                content: '请先登录以使用保存的地址',
+                confirmText: '去登录',
+                success: (res) => {
+                    if (res.confirm) {
+                        wx.switchTab({
+                            url: '/pages/me/me'
+                        });
+                    }
+                }
+            });
+            return;
+        }
+
+        wx.showLoading({ title: '获取地址...' });
+        try {
+            const res = await db.collection('addresses').get();
+            wx.hideLoading();
+            const list = res.data;
+            if (list && list.length > 0) {
+                // Find default or use first
+                const target = list.find(a => a.isDefault) || list[0];
+
+                // Format the full address: Country Region Street Building Apt
+                const parts = [
+                    target.country,
+                    target.region ? target.region.join(' ') : '',
+                    target.street,
+                    target.building,
+                    target.apt ? '#' + target.apt : ''
+                ].filter(p => !!p);
+
+                const formattedAddress = parts.join(', ');
+
+                this.setData({
+                    address: formattedAddress,
+                    isAddressSaved: true
+                });
+
+                // Sync to local storage
+                wx.setStorageSync('carrier_address', formattedAddress);
+                wx.showToast({ title: '已自动填充', icon: 'success' });
+            } else {
+                wx.showToast({ title: '暂无已存地址', icon: 'none' });
+            }
+        } catch (err) {
+            wx.hideLoading();
+            console.error('Fetch addresses failed', err);
+            wx.showToast({ title: '获取失败', icon: 'none' });
+        }
     }
 })

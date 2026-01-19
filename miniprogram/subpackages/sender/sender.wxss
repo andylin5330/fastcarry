@@ -201,13 +201,14 @@
 }
 
 .search-btn {
-  background-color: #0c3629; 
+  background: linear-gradient(to right, #1eb1f7, #6149f6); 
   color: #ffffff;
   border-radius: 50rpx;
   font-size: 34rpx;
   font-weight: bold;
   padding: 20rpx 0;
-  box-shadow: 0 8rpx 20rpx rgba(12, 54, 41, 0.2);
+  box-shadow: 0 8rpx 20rpx rgba(97, 73, 246, 0.3);
+  border: none;
 }
 
 .disclaimer {

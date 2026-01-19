@@ -18,14 +18,15 @@ App({
     userInfo: null
   },
 
-  initUserInfo(name, score, avatar, token, id, uid) {
+  initUserInfo(name, score, avatar, token, id, uid, balance) {
     this.globalData.userInfo = {
       name: name,
       score: score,
       avatar: avatar,
       token: token,
       _id: id,
-      uid: uid
+      uid: uid,
+      balance: balance || 0
     }
   },
 

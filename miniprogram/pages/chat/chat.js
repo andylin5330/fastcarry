@@ -5,9 +5,9 @@ Page({
     data: {
         messages: [],
         inputValue: '',
-        scrollToView: '',
+        lastMessageId: '',
         myOpenid: '',
-        myAvatar: '/images/default_avatar.png',
+        myAvatar: 'cloud://cloud1-1g75i69o3bf03886/images/default_avatar.png',
         otherAvatar: '/images/ai_avatar.png',
         chatType: 'user', // 'user' or 'system'
         conversationId: ''
@@ -23,20 +23,53 @@ Page({
         this.initChat();
     },
 
-    initChat: function () {
+    initChat: async function () {
         if (!app.globalData.userInfo) return;
 
         this.setData({
             myOpenid: app.globalData.userInfo._id,
-            myAvatar: app.globalData.userInfo.avatar || '/images/default_avatar.png'
+            myAvatar: app.globalData.userInfo.avatar || 'cloud://cloud1-1g75i69o3bf03886/images/default_avatar.png'
         });
 
         if (this.data.chatType === 'system') {
             wx.setNavigationBarTitle({ title: '智能客服' });
-            this.loadSystemWelcome();
+            // For system chat, use a deterministic conversationId based on user ID
+            if (!this.data.conversationId) {
+                this.setData({
+                    conversationId: 'system_' + app.globalData.userInfo._id
+                });
+            }
         } else {
-            this.watchMessages();
+            // For user chat, fetch other party profile
+            const db = wx.cloud.database();
+            const _ = db.command;
+
+            try {
+                const convRes = await db.collection('conversations').doc(this.data.conversationId).get();
+                const conv = convRes.data;
+                const otherPartyId = conv.participants.find(id => id !== app.globalData.userInfo._id);
+
+                const userRes = await db.collection('users').where(_.or([
+                    { _id: otherPartyId },
+                    { openid: otherPartyId }
+                ])).get();
+
+                if (userRes.data.length > 0) {
+                    const otherUser = userRes.data[0];
+                    this.setData({
+                        otherAvatar: otherUser.avatar || 'cloud://cloud1-1g75i69o3bf03886/images/default_avatar.png'
+                    });
+                    wx.setNavigationBarTitle({ title: otherUser.name });
+                } else {
+                    wx.setNavigationBarTitle({ title: '聊天' });
+                }
+            } catch (err) {
+                console.error('Init user chat failed', err);
+                wx.setNavigationBarTitle({ title: '聊天' });
+            }
         }
+
+        this.watchMessages();
     },
 
     loadSystemWelcome: function () {
@@ -44,12 +77,12 @@ Page({
             messages: [{
                 _id: 'welcome',
                 type: 'text',
-                content: '👋 您好！我是 FastCarry 智能助手。\n\n我可以帮您解答：\n📦 订单取消/退款\n🚫 违禁品查询\n🔒 支付安全\n💰 运费说明\n📋 使用流程\n⏰ 时效查询\n\n请直接说出您的问题，或输入关键词（如：退款、违禁品、安全等）。',
+                content: '您好！我是 FastCarry AI 助手。有什么我可以帮您的吗？您可以询问关于订单、违禁品或支付的问题。',
                 senderId: 'system',
                 timestamp: new Date()
-            }]
+            }],
+            lastMessageId: 'msg-0'
         });
-        this.scrollToBottom();
     },
 
     watchMessages: function () {
@@ -62,10 +95,23 @@ Page({
             .orderBy('timestamp', 'asc')
             .watch({
                 onChange: (snapshot) => {
+                    let messages = snapshot.docs;
+
+                    // If system chat and no messages, show welcome
+                    if (this.data.chatType === 'system' && messages.length === 0) {
+                        messages = [{
+                            _id: 'welcome',
+                            type: 'text',
+                            content: '您好！我是 FastCarry AI 助手。有什么我可以帮您的吗？您可以询问关于订单、违禁品或支付的问题。',
+                            senderId: 'system',
+                            timestamp: new Date()
+                        }];
+                    }
+
                     this.setData({
-                        messages: snapshot.docs
+                        messages: messages,
+                        lastMessageId: `msg-${messages.length - 1}`
                     });
-                    this.scrollToBottom();
                 },
                 onError: (err) => {
                     console.error('Watch error:', err);
@@ -99,73 +145,38 @@ Page({
 
     handleSystemChat: function (content) {
         const userMsg = {
-            _id: Date.now().toString(),
             content,
             senderId: this.data.myOpenid,
-            timestamp: new Date(),
-            type: 'text'
+            timestamp: db.serverDate(),
+            type: 'text',
+            conversationId: this.data.conversationId
         };
 
-        const newMessages = [...this.data.messages, userMsg];
-        this.setData({
-            messages: newMessages
-        });
-        this.scrollToBottom();
-
-        // Add typing indicator
-        const typingMsg = {
-            _id: 'typing',
-            content: '正在输入中...',
-            senderId: 'system',
-            timestamp: new Date(),
-            type: 'typing'
-        };
-
-        const messagesWithTyping = [...this.data.messages, typingMsg];
-        this.setData({
-            messages: messagesWithTyping
-        });
-        this.scrollToBottom();
-
-        // Trigger AI response
-        wx.cloud.callFunction({
-            name: 'aiAssistant',
-            data: { text: content }
+        // Save user message to database
+        db.collection('messages').add({
+            data: userMsg
+        }).then(() => {
+            // Trigger AI response
+            return wx.cloud.callFunction({
+                name: 'aiAssistant',
+                data: { text: content }
+            });
         }).then(res => {
-            // Remove typing indicator and add AI response
             const aiMsg = {
-                _id: 'ai-' + Date.now(),
                 content: res.result.reply,
                 senderId: 'system',
-                timestamp: new Date(),
-                type: 'text'
+                timestamp: db.serverDate(),
+                type: 'text',
+                conversationId: this.data.conversationId
             };
-
-            const finalMessages = this.data.messages.filter(m => m.type !== 'typing');
-            this.setData({
-                messages: [...finalMessages, aiMsg]
+            // Save AI message to database
+            return db.collection('messages').add({
+                data: aiMsg
             });
-            this.scrollToBottom();
         }).catch(err => {
-            console.error('AI Assistant error:', err);
-
-            // Remove typing indicator and show error message
-            const errorMsg = {
-                _id: 'error-' + Date.now(),
-                content: '抱歉，智能客服暂时无法回复。请稍后再试或联系人工客服。',
-                senderId: 'system',
-                timestamp: new Date(),
-                type: 'text'
-            };
-
-            const finalMessages = this.data.messages.filter(m => m.type !== 'typing');
-            this.setData({
-                messages: [...finalMessages, errorMsg]
-            });
-            this.scrollToBottom();
-
+            console.error('System chat error:', err);
             wx.showToast({
-                title: '客服响应失败',
+                title: '发送失败',
                 icon: 'none'
             });
         });
@@ -186,15 +197,6 @@ Page({
                 lastUpdate: db.serverDate()
             }
         });
-    },
-
-    scrollToBottom: function () {
-        // Use a small delay to ensure DOM has updated
-        setTimeout(() => {
-            this.setData({
-                scrollToView: 'bottom-anchor'
-            });
-        }, 100);
     },
 
     onUnload: function () {

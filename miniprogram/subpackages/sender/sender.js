@@ -77,11 +77,12 @@ Page({
     onCancelOrder: function (e) {
         const orderId = e.target.dataset.id || e.currentTarget.dataset.id;
         wx.showModal({
-            title: '取消订单',
-            content: '确定要取消这个订单吗？',
+            title: '确认取消',
+            content: '确定要取消此订单吗？取消后该带货请求将被彻底删除。',
+            confirmColor: '#FF0000',
             success: (res) => {
                 if (res.confirm) {
-                    wx.showLoading({ title: '处理中...' });
+                    wx.showLoading({ title: '取消中...' });
                     wx.cloud.callFunction({
                         name: 'cancelOrder',
                         data: { orderId }
@@ -91,7 +92,7 @@ Page({
                             wx.showToast({ title: '已取消', icon: 'success' });
                             this.fetchMyOrders(); // Refresh list
                         } else {
-                            wx.showToast({ title: '取消失败', icon: 'none' });
+                            wx.showToast({ title: '取消失败: ' + (res.result.msg || '未知错误'), icon: 'none' });
                         }
                     }).catch(err => {
                         wx.hideLoading();

@@ -1,4 +1,4 @@
-<view class="container">
+<view class="container" wx:if="{{ isLoggedIn }}">
   <van-cell-group border="{{ false }}">
     <!-- System AI Chat Item -->
     <van-cell 
@@ -27,7 +27,7 @@
         bind:click="goToChat"
       >
         <view slot="icon" style="margin-right: 20rpx;">
-          <van-image width="100rpx" height="100rpx" src="{{ item.otherPartyAvatar || '/images/default_avatar.png' }}" round />
+          <van-image width="100rpx" height="100rpx" src="{{ item.otherPartyAvatar || 'cloud://cloud1-1g75i69o3bf03886/images/default_avatar.png' }}" round />
         </view>
         <view slot="right-icon">
           <view class="time-label">{{ item.lastMessageTime }}</view>

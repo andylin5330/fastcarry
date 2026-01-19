@@ -4,14 +4,30 @@ Page({
     data: {
         conversations: [],
         aiLastMessage: '',
-        aiUnreadCount: 0
+        aiUnreadCount: 0,
+        isLoggedIn: false
     },
 
     onShow: function () {
+        if (!app.globalData.userInfo) {
+            this.setData({ isLoggedIn: false });
+            wx.showToast({
+                title: '请先登录',
+                icon: 'none',
+                duration: 2000
+            });
+            setTimeout(() => {
+                wx.switchTab({
+                    url: '/pages/me/me',
+                });
+            }, 1000);
+            return;
+        }
+        this.setData({ isLoggedIn: true });
         this.fetchConversations();
     },
 
-    fetchConversations: function () {
+    fetchConversations: async function () {
         if (!app.globalData.userInfo) {
             return;
         }
@@ -19,25 +35,61 @@ Page({
         const db = wx.cloud.database();
         const _ = db.command;
 
-        // Fetch user-to-user conversations
-        db.collection('conversations')
+        try {
+            // 1. Fetch user-to-user conversations
+            const res = await db.collection('conversations')
+                .where({
+                    participants: app.globalData.userInfo._id
+                })
+                .orderBy('lastUpdate', 'desc')
+                .get();
+
+            const conversations = res.data;
+            const updatedConversations = [];
+
+            for (let conv of conversations) {
+                // Identify the other participant
+                const otherPartyId = conv.participants.find(id => id !== app.globalData.userInfo._id);
+
+                // Fetch other party profile
+                // Robust lookup: check both _id and openid
+                const userRes = await db.collection('users').where(_.or([
+                    { _id: otherPartyId },
+                    { openid: otherPartyId }
+                ])).get();
+
+                const otherUser = userRes.data.length > 0 ? userRes.data[0] : null;
+
+                updatedConversations.push({
+                    ...conv,
+                    otherPartyName: otherUser ? otherUser.name : '未知用户',
+                    otherPartyAvatar: otherUser ? otherUser.avatar : 'cloud://cloud1-1g75i69o3bf03886/images/default_avatar.png',
+                    lastMessageTime: this.formatTime(conv.lastUpdate)
+                });
+            }
+
+            this.setData({
+                conversations: updatedConversations
+            });
+        } catch (err) {
+            console.error('Fetch conversations failed', err);
+        }
+
+        // Fetch latest AI message
+        const systemConvId = 'system_' + app.globalData.userInfo._id;
+        db.collection('messages')
             .where({
-                participants: app.globalData.userInfo._id
+                conversationId: systemConvId
             })
-            .orderBy('lastUpdate', 'desc')
+            .orderBy('timestamp', 'desc')
+            .limit(1)
             .get()
             .then(res => {
-                this.setData({
-                    conversations: res.data.map(conv => {
-                        // Mocking names and avatars for now since real ones would be in user collection
-                        return {
-                            ...conv,
-                            otherPartyName: '用户 ' + conv._id.substring(0, 4),
-                            otherPartyAvatar: '',
-                            lastMessageTime: this.formatTime(conv.lastUpdate)
-                        };
-                    })
-                });
+                if (res.data.length > 0) {
+                    this.setData({
+                        aiLastMessage: res.data[0].content
+                    });
+                }
             });
     },
 

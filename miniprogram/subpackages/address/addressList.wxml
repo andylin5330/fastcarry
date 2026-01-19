@@ -1,0 +1,71 @@
+<view class="container">
+  <view class="address-list">
+    <block wx:for="{{ addressList }}" wx:key="_id">
+      <view class="address-card">
+        <view class="card-header">
+          <view class="header-title">
+            <view class="accent-bar"></view>
+            <text>收货地址</text>
+          </view>
+          <van-tag type="primary" color="#00d2ff" text-color="#fff" round wx:if="{{ item.isDefault }}">默认</van-tag>
+        </view>
+
+        <view class="card-content">
+          <view class="info-row">
+            <van-icon name="user-o" class="row-icon" />
+            <text class="label">联系人</text>
+            <text class="value">{{ item.name }}</text>
+          </view>
+          
+          <view class="info-row">
+            <van-icon name="phone-o" class="row-icon" />
+            <text class="label">手机号</text>
+            <text class="value">{{ item.phone }}</text>
+          </view>
+
+          <view class="info-row">
+            <van-icon name="location-o" class="row-icon" />
+            <text class="label">国家/城市</text>
+            <text class="value">{{ item.country }} · {{ item.region[1] }}</text>
+          </view>
+
+          <view class="info-row">
+            <van-icon name="wap-home-o" class="row-icon" />
+            <text class="label">街道/门牌</text>
+            <text class="value">{{ item.street }} {{ item.building }} {{ item.apt ? '#' + item.apt : '' }}</text>
+          </view>
+
+          <view class="info-row">
+            <van-icon name="underway-o" class="row-icon" />
+            <text class="label">信息</text>
+            <text class="value">{{ item.postcode }} | {{ item.phone }}</text>
+          </view>
+
+          <view class="detail-row" wx:if="{{ item.detail }}">
+            <text class="detail-text">{{ item.detail }}</text>
+          </view>
+        </view>
+
+        <view class="card-footer">
+          <view class="edit-btn" bindtap="editAddress" data-id="{{ item._id }}">编辑地址</view>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <view class="empty-state" wx:if="{{ addressList.length === 0 }}">
+    <view class="empty-text">暂无地址，请添加</view>
+  </view>
+
+  <view class="bottom-btn">
+    <van-button 
+      block 
+      round 
+      bind:click="addAddress" 
+      custom-class="add-btn-gradient"
+      icon="plus"
+    >
+      添加新地址
+    </van-button>
+  </view>
+</view>

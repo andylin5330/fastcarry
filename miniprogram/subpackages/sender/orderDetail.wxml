@@ -25,11 +25,12 @@
 
   <!-- Recipient Section -->
   <view class="form-card">
-    <view class="section-title">收件信息</view>
+    <view class="section-title">收件信息 (带货人提供)</view>
     <van-cell-group border="{{ false }}">
-      <van-cell title="收件人" value="{{ order.recipientName || '未填写' }}" border="{{ false }}" />
-      <van-cell title="联系电话" value="{{ order.recipientPhone || '未填写' }}" border="{{ false }}" />
-      <van-cell title="收件地址" label="{{ order.recipientAddress || '未填写' }}" border="{{ false }}" />
+      <van-cell title="带货号" value="{{ order.carryingNo }}" border="{{ false }}" title-style="color: #666;" />
+      <van-cell title="收件人" value="{{ order.recipientName }}" border="{{ false }}" />
+      <van-cell title="联系方式" value="{{ order.recipientPhone }}" border="{{ false }}" />
+      <van-cell title="收件地址" label="{{ order.recipientAddress }}" border="{{ false }}" />
     </van-cell-group>
   </view>
 

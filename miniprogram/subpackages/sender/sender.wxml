@@ -119,17 +119,22 @@
     <van-tab title="我寄送的">
       <view class="content-area" style="padding: 24rpx;">
         <block wx:if="{{myOrders.length > 0}}">
-            <view class="form-card" wx:for="{{myOrders}}" wx:key="_id" style="margin-bottom: 24rpx;" bindtap="onViewOrderDetail" data-id="{{item._id}}">
-                <view style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20rpx;">
-                  <view class="section-title" style="margin-bottom: 0;">订单: {{item.flightNo}}</view>
-                  <van-tag type="{{item.status === 'cancelled' ? 'default' : 'primary'}}">{{item.status}}</van-tag>
+            <view class="form-card" wx:for="{{myOrders}}" wx:key="_id" style="margin-bottom: 24rpx;">
+                <!-- Clickable area for details -->
+                <view bindtap="onViewOrderDetail" data-id="{{item._id}}">
+                    <view style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20rpx;">
+                      <view class="section-title" style="margin-bottom: 0;">订单: {{item.flightNo}}</view>
+                      <van-tag type="{{item.status === 'cancelled' ? 'default' : 'primary'}}">{{item.status}}</van-tag>
+                    </view>
+                    <van-cell-group border="{{ false }}">
+                      <van-cell title="路线" value="{{item.route}}" border="{{ false }}" icon="location-o" />
+                      <van-cell title="重量" value="{{item.weight}}KG" border="{{ false }}" icon="bag-o" />
+                      <van-cell title="报价" value="待议" border="{{ false }}" />
+                      <van-cell wx:if="{{item.note}}" title="备注" label="{{item.note}}" border="{{ false }}" icon="notes-o" />
+                    </van-cell-group>
                 </view>
-                <van-cell-group border="{{ false }}">
-                  <van-cell title="路线" value="{{item.route}}" border="{{ false }}" icon="location-o" />
-                  <van-cell title="重量" value="{{item.weight}}KG" border="{{ false }}" icon="bag-o" />
-                  <van-cell title="报价" value="待议" border="{{ false }}" />
-                  <van-cell wx:if="{{item.note}}" title="备注" label="{{item.note}}" border="{{ false }}" icon="notes-o" />
-                </van-cell-group>
+
+                <!-- Action section (outside details click area) -->
                 <view class="footer-btn" style="padding-top: 20rpx; display: flex; justify-content: flex-end;" wx:if="{{item.status !== 'cancelled'}}">
                   <van-button 
                     size="small" 

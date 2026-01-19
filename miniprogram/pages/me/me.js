@@ -63,7 +63,7 @@ Page({
 
         if (data.code === 100) {
           const { userInfo } = data
-          app.initUserInfo(userInfo.name, userInfo.score, userInfo.avatar, 'CLOUD_AUTH', userInfo._id, userInfo.uid)
+          app.initUserInfo(userInfo.name, userInfo.score, userInfo.avatar, 'CLOUD_AUTH', userInfo._id, userInfo.uid, userInfo.balance)
           this.setData({
             userInfo: app.globalData.userInfo
           })
@@ -194,6 +194,12 @@ Page({
           icon: 'success'
         })
       }
+    })
+  },
+
+  handleGoToWallet() {
+    wx.navigateTo({
+      url: '/subpackages/wallet/wallet',
     })
   },
 

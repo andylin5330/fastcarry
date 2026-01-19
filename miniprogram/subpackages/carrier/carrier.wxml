@@ -79,7 +79,12 @@
         </view>
 
         <view class="form-card">
-          <view class="section-title">收件地址 (自动保存)</view>
+          <view class="section-title-row">
+            <view class="section-title" style="margin-bottom: 0;">收件地址 (自动保存)</view>
+            <view class="use-saved-link" bindtap="onSelectSavedAddress">
+              <van-icon name="location-o" /> 使用已存地址
+            </view>
+          </view>
            <van-field
               value="{{ address }}"
               type="textarea"
@@ -105,8 +110,9 @@
       <view class="content-area" style="padding: 24rpx;">
           <block wx:if="{{myTrips.length > 0}}">
              <view class="form-card" wx:for="{{myTrips}}" wx:key="_id" style="margin-bottom: 24rpx;">
-                <view class="section-title">行程: {{item.flightNo}}</view>
+                <view class="section-title">带货号: {{item.carryingNo || '待生成'}}</view>
                 <van-cell-group border="{{ false }}">
+                  <van-cell title="航班" value="{{item.flightNo}}" border="{{ false }}" icon="notes-o" />
                   <van-cell title="路线" value="{{item.route}}" border="{{ false }}" icon="location-o" />
                   <van-cell title="余量" value="{{item.details.weight}}KG" border="{{ false }}" icon="bag-o" />
                   <van-cell title="发布时间" value="{{item.createTime_fmt}}" border="{{ false }}" />

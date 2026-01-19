@@ -38,32 +38,36 @@
       </view>
     </view>
 
-    <!-- Stats Grid -->
-    <view class="stats-card">
-      <van-grid column-num="4" border="{{ false }}">
-        <van-grid-item use-slot>
-          <view class="stat-value">{{userInfo.score || 0}}</view>
-          <view class="stat-label">积分</view>
-        </van-grid-item>
-        <van-grid-item use-slot>
-          <view class="stat-value">0</view>
-          <view class="stat-label">优惠券</view>
-        </van-grid-item>
-        <van-grid-item use-slot>
-          <view class="stat-value">0</view>
-          <view class="stat-label">关注</view>
-        </van-grid-item>
-        <van-grid-item use-slot>
-          <view class="stat-value">0</view>
-          <view class="stat-label">足迹</view>
-        </van-grid-item>
-      </van-grid>
+    <!-- Stats Bar -->
+    <view class="vip-bar">
+      <view class="vip-item">
+        <van-icon name="medal-o" color="#a38b5e" size="40rpx" />
+        <text class="vip-label">信用分</text>
+        <text class="vip-value">{{userInfo.score || 0}}</text>
+      </view>
+    </view>
+
+    <!-- Wallet Card -->
+    <view class="wallet-card">
+      <view class="card-header">
+        <text class="card-title">我的钱包</text>
+      </view>
+      <view class="wallet-content">
+        <view class="wallet-sub-item" bindtap="handleGoToWallet">
+          <view class="wallet-value">{{userInfo.balance || '0.00'}}</view>
+          <view class="wallet-label">我的余额</view>
+        </view>
+        <view class="wallet-sub-item">
+          <view class="wallet-value">0</view>
+          <view class="wallet-label">优惠券</view>
+        </view>
+      </view>
     </view>
 
     <!-- Menu List -->
     <view class="menu-card">
       <van-cell-group inset>
-        <van-cell title="地址管理" is-link icon="location-o" />
+        <van-cell title="地址管理" is-link icon="location-o" url="/subpackages/address/addressList" />
         <van-cell title="积分兑换记录" is-link icon="gold-coin-o" />
         <van-cell title="我参加的活动" is-link icon="flag-o" />
         <van-cell title="分享应用" is-link icon="share-o" />

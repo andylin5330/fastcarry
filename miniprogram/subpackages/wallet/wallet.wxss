@@ -1,0 +1,57 @@
+.container {
+  min-height: 100vh;
+  background-color: #f7f8fa;
+  padding-bottom: 40rpx;
+}
+
+.wallet-header {
+  background: linear-gradient(135deg, #1eb1f7, #6149f6);
+  color: #fff;
+  padding: 80rpx 40rpx;
+  text-align: center;
+  border-bottom-left-radius: 40rpx;
+  border-bottom-right-radius: 40rpx;
+  box-shadow: 0 4rpx 20rpx rgba(238, 10, 36, 0.2);
+}
+
+.balance-title {
+  font-size: 28rpx;
+  opacity: 0.9;
+  margin-bottom: 20rpx;
+}
+
+.balance-amount {
+  font-size: 80rpx;
+  font-weight: bold;
+  font-family: 'DIN Alternate', sans-serif;
+}
+
+.action-card {
+  margin-top: 40rpx;
+}
+
+.transaction-list {
+  margin-top: 60rpx;
+  padding: 0 32rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #323233;
+  margin-bottom: 24rpx;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100rpx 0;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #969799;
+  margin-top: 20rpx;
+}

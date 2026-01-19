@@ -57,6 +57,24 @@
   padding-left: 15rpx;
 }
 
+.section-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.use-saved-link {
+  font-size: 24rpx;
+  color: #1eb1f7;
+  display: flex;
+  align-items: center;
+}
+
+.use-saved-link van-icon {
+  margin-right: 4rpx;
+}
+
 /* Space Type */
 .radio-group-spaced {
   display: flex;

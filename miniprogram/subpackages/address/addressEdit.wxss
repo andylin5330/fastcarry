@@ -1,0 +1,28 @@
+.container {
+  background-color: #f7f8fa;
+  min-height: 100vh;
+  padding-top: 20rpx;
+}
+
+.mt-20 {
+  margin-top: 20rpx;
+}
+
+.btn-group {
+  padding: 40rpx 30rpx;
+}
+
+.row-fields {
+  display: flex;
+}
+
+.btn-gradient {
+  background: linear-gradient(90deg, #00b0ff 0%, #2979ff 50%, #651fff 100%) !important;
+  color: #fff !important;
+  border: none !important;
+  font-weight: bold !important;
+  font-size: 28rpx !important;
+  height: 88rpx !important;
+  line-height: 88rpx !important;
+  box-shadow: 0 6rpx 16rpx rgba(101, 31, 255, 0.3);
+}

@@ -1,0 +1,131 @@
+.container {
+  padding-bottom: 120rpx;
+  background-color: #f7f8fa;
+  min-height: 100vh;
+}
+
+.address-list {
+  padding: 20rpx;
+}
+
+.address-list {
+  padding: 30rpx;
+}
+
+.address-card {
+  background: #fff;
+  border-radius: 24rpx;
+  margin-bottom: 30rpx;
+  padding: 30rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
+  display: block;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.accent-bar {
+  width: 8rpx;
+  height: 32rpx;
+  background: #00d2ff;
+  border-radius: 4rpx;
+  margin-right: 16rpx;
+}
+
+.card-content {
+  padding-bottom: 20rpx;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+  font-size: 28rpx;
+}
+
+.row-icon {
+  font-size: 32rpx;
+  color: #999;
+  margin-right: 16rpx;
+}
+
+.label {
+  color: #666;
+  width: 120rpx;
+}
+
+.value {
+  color: #333;
+  flex: 1;
+  text-align: right;
+  font-weight: 500;
+}
+
+.detail-row {
+  margin-top: 10rpx;
+  padding: 20rpx;
+  background: #f9f9f9;
+  border-radius: 12rpx;
+}
+
+.detail-text {
+  font-size: 26rpx;
+  color: #666;
+  word-break: break-all;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1rpx solid #eee;
+  padding-top: 24rpx;
+  margin-top: 10rpx;
+}
+
+.edit-btn {
+  font-size: 22rpx;
+  color: #ff8e53;
+  border: 1rpx solid #ff8e53;
+  padding: 8rpx 30rpx;
+  border-radius: 30rpx;
+}
+
+.empty-state {
+  text-align: center;
+  padding-top: 200rpx;
+}
+
+.empty-text {
+  color: #999;
+  font-size: 28rpx;
+}
+
+.bottom-btn {
+  position: fixed;
+  bottom: 40rpx;
+  left: 30rpx;
+  right: 30rpx;
+}
+
+.add-btn-gradient {
+  background: linear-gradient(90deg, #00b0ff 0%, #2979ff 50%, #651fff 100%) !important;
+  color: #fff !important;
+  border: none !important;
+  font-weight: bold !important;
+  font-size: 32rpx !important;
+  height: 88rpx !important;
+  line-height: 88rpx !important;
+  box-shadow: 0 6rpx 16rpx rgba(101, 31, 255, 0.3);
+}
