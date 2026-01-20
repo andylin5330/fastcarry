@@ -67,9 +67,14 @@
     <!-- Menu List -->
     <view class="menu-card">
       <van-cell-group inset>
+        <van-cell 
+          title="实名认证" 
+          is-link 
+          icon="manager-o" 
+          value="{{userInfo.isVerified ? '已认证' : '未认证'}}" 
+          url="/subpackages/auth/verification"
+        />
         <van-cell title="地址管理" is-link icon="location-o" url="/subpackages/address/addressList" />
-        <van-cell title="积分兑换记录" is-link icon="gold-coin-o" />
-        <van-cell title="我参加的活动" is-link icon="flag-o" />
         <van-cell title="分享应用" is-link icon="share-o" />
         <van-cell title="清除缓存" is-link border="{{ false }}" bind:click="handleClearCache" icon="delete-o" />
       </van-cell-group>

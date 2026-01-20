@@ -7,7 +7,6 @@
   <view class="action-card">
     <van-cell-group inset>
       <van-cell title="充值" is-link icon="balance-pay" border="{{ false }}" />
-      <van-cell title="提现" is-link icon="cash-back-record" border="{{ false }}" />
     </van-cell-group>
   </view>
 

@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "带物",
+  "navigationBarTitleText": "顺路带",
   "navigationBarBackgroundColor": "#fff",
   "navigationBarTextStyle": "black",
   "usingComponents": {
@@ -14,7 +14,10 @@
     "van-tabs": "@vant/weapp/tabs/index",
     "van-tab": "@vant/weapp/tab/index",
     "van-empty": "@vant/weapp/empty/index",
-    "van-tag": "@vant/weapp/tag/index"
+    "van-tag": "@vant/weapp/tag/index",
+    "van-steps": "@vant/weapp/steps/index",
+    "van-picker": "@vant/weapp/picker/index",
+    "van-popup": "@vant/weapp/popup/index"
   },
   "enablePullDownRefresh": false,
   "backgroundColor": "#f5f5f5",

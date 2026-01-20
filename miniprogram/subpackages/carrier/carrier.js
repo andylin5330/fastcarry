@@ -8,10 +8,32 @@ Page({
 
         statusBarHeight: 0,
 
+        // Wizard State
+        currentStep: 0,
+        steps: [
+            { text: '航班信息', desc: 'Flight' },
+            { text: '行程地点', desc: 'Route' },
+            { text: '收件地址', desc: 'Address' },
+            { text: '行李空间', desc: 'Space' }
+        ],
+
         // Form Data
         flightNo: '',
+
+        // Route Data
         departure: '',
         destination: '',
+        commonCities: ['上海', '北京', '广州', '多伦多', '温哥华', '纽约'],
+
+        // Picker State
+        showDepPicker: false,
+        showDestPicker: false,
+        cityColumns: [
+            '上海', '北京', '广州', '深圳', '杭州', '成都', '重庆', '西安',
+            '多伦多', '温哥华', '蒙特利尔', '卡尔加里',
+            '纽约', '洛杉矶', '旧金山', '西雅图', '芝加哥',
+            '伦敦', '巴黎', '东京', '首尔', '新加坡', '悉尼'
+        ],
 
         // Space Logic
         spaceType: 'empty', // 'empty' | 'remaining' | 'abnormal'
@@ -115,6 +137,64 @@ Page({
         wx.navigateBack();
     },
 
+    // Wizard Navigation
+    nextStep() {
+        if (this.data.currentStep < 3) {
+            // Validation
+            if (this.data.currentStep === 0 && !this.data.flightNo) {
+                wx.showToast({ title: '请输入航班号', icon: 'none' });
+                return;
+            }
+            if (this.data.currentStep === 1 && (!this.data.departure || !this.data.destination)) {
+                wx.showToast({ title: '请完善行程地点', icon: 'none' });
+                return;
+            }
+            if (this.data.currentStep === 2 && !this.data.address) {
+                wx.showToast({ title: '请输入收件地址', icon: 'none' });
+                return;
+            }
+
+            this.setData({ currentStep: this.data.currentStep + 1 });
+        }
+    },
+
+    prevStep() {
+        if (this.data.currentStep > 0) {
+            this.setData({ currentStep: this.data.currentStep - 1 });
+        }
+    },
+
+    // Picker Handlers
+    onShowDepPicker() {
+        this.setData({ showDepPicker: true });
+    },
+
+    onCloseDepPicker() {
+        this.setData({ showDepPicker: false });
+    },
+
+    onConfirmDep(e) {
+        this.setData({
+            departure: e.detail.value,
+            showDepPicker: false
+        });
+    },
+
+    onShowDestPicker() {
+        this.setData({ showDestPicker: true });
+    },
+
+    onCloseDestPicker() {
+        this.setData({ showDestPicker: false });
+    },
+
+    onConfirmDest(e) {
+        this.setData({
+            destination: e.detail.value,
+            showDestPicker: false
+        });
+    },
+
     // Handlers
     onFlightInput(e) { this.setData({ flightNo: e.detail }); },
     onDepInput(e) { this.setData({ departure: e.detail }); },
@@ -141,6 +221,21 @@ Page({
     },
 
     onSubmit: function () {
+        // Real-name Authentication Check
+        if (app.globalData.userInfo && !app.globalData.userInfo.isVerified) {
+            wx.showModal({
+                title: '实名认证提示',
+                content: '为了保障交易安全，发布行程前需完成实名认证。',
+                confirmText: '去认证',
+                success: (res) => {
+                    if (res.confirm) {
+                        wx.navigateTo({ url: '/subpackages/auth/verification' });
+                    }
+                }
+            });
+            return;
+        }
+
         // Validate
         if (!this.data.flightNo || !this.data.departure || !this.data.destination) {
             wx.showToast({ title: '请补全航班及行程信息', icon: 'none' });

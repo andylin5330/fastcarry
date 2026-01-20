@@ -1,0 +1,56 @@
+<view class="container">
+  <!-- Carrier Info Card -->
+  <view class="card carrier-card">
+    <view class="carrier-header">
+      <van-image 
+        round 
+        width="120rpx" 
+        height="120rpx" 
+        src="{{carrier.avatarUrl || '/images/default_avatar.png'}}" 
+      />
+      <view class="carrier-info">
+        <view class="carrier-name-row">
+            <text class="carrier-name">{{carrier.nickName || '未命名用户'}}</text>
+            <van-tag type="success" wx:if="{{carrier.isVerified}}">已认证</van-tag>
+        </view>
+        <view class="carrier-score">
+            <van-icon name="medal-o" color="#FFD21E" /> 信用分: {{carrier.score || 0}}
+        </view>
+        <view class="carrier-desc" wx:if="{{carrier.intro}}">{{carrier.intro}}</view>
+        <view class="carrier-desc" wx:else>这位带货人很懒，什么都没写~</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Flight Info Card -->
+  <view class="card flight-card">
+    <view class="card-title">行程信息</view>
+    <van-divider />
+    <view class="info-row">
+        <text class="label">航班号</text>
+        <text class="value">{{trip.flightNo}}</text>
+    </view>
+    <view class="info-row">
+        <text class="label">路线</text>
+        <text class="value">{{trip.route}}</text>
+    </view>
+    <view class="info-row">
+        <text class="label">日期</text>
+        <text class="value">{{trip.date}}</text>
+    </view>
+    <view class="info-row">
+        <text class="label">可用空间</text>
+        <text class="value">{{trip.details.weight || 0}} KG / {{trip.details.volume || 0}}%</text>
+    </view>
+    <view class="info-row">
+        <text class="label">参考报价</text>
+        <text class="value price">¥100/KG</text>
+    </view>
+  </view>
+
+  <!-- Actions -->
+  <view class="footer-actions">
+    <van-button icon="chat-o" type="default" custom-style="flex: 1; margin-right: 20rpx;" bind:click="onContact">联系带货人</van-button>
+    <van-button icon="cart-o" type="info" custom-style="flex: 1;" bind:click="onRequest">立即预约</van-button>
+  </view>
+</view>

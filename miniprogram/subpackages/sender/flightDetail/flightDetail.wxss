@@ -1,0 +1,95 @@
+.container {
+  padding: 30rpx;
+  background-color: #f7f8fa;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.card {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+/* Carrier Card */
+.carrier-header {
+  display: flex;
+  align-items: center;
+}
+
+.carrier-info {
+  margin-left: 24rpx;
+  flex: 1;
+}
+
+.carrier-name-row {
+    display: flex;
+    align-items: center;
+    gap: 12rpx;
+    margin-bottom: 8rpx;
+}
+
+.carrier-name {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.carrier-score {
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 12rpx;
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+}
+
+.carrier-desc {
+    font-size: 24rpx;
+    color: #999;
+}
+
+/* Flight Card */
+.card-title {
+    font-size: 30rpx;
+    font-weight: bold;
+    color: #333;
+    padding-bottom: 10rpx;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20rpx;
+    font-size: 28rpx;
+}
+
+.label {
+    color: #666;
+}
+
+.value {
+    color: #333;
+    font-weight: 500;
+}
+
+.price {
+    color: #ee0a24;
+    font-size: 32rpx;
+    font-weight: bold;
+}
+
+/* Footer */
+.footer-actions {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20rpx 30rpx;
+    background: #fff;
+    display: flex;
+    box-shadow: 0 -2rpx 10rpx rgba(0,0,0,0.05);
+    padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+}

@@ -7,65 +7,103 @@
     <van-tab title="运费试算">
       <!-- Unified Query Card -->
       <view class="query-card" style="margin-top: 20rpx;">
-        <!-- Route Section -->
-        <view class="route-section">
-          <view class="location-box">
-            <view class="input-with-icon">
-                <input class="location-input" placeholder="出发地" value="{{departure}}" bindinput="onDepInput" placeholder-style="color: #bbb;" />
-            </view>
-            <view class="location-label">出发城市</view>
-          </view>
-          <view class="route-arrow">
-            <text class="arrow-dashed">- -</text>
-            <van-icon name="guide-o" color="#4caf50" size="40rpx" />
-            <text class="arrow-dashed">- -</text>
-          </view>
-          <view class="location-box">
-            <input class="location-input" placeholder="输入目的地" value="{{searchQuery}}" bindinput="onSearchInput" placeholder-style="color: #bbb;" />
-            <view class="location-label">收货地区</view>
-          </view>
-        </view>
+        <!-- Route Section using van-cell-group -->
+        <!-- Route Section using van-cell-group -->
+        <van-cell-group inset title="行程信息">
+          <van-cell
+            title="出发地"
+            value="{{ departure || '请选择' }}"
+            is-link
+            bind:click="onShowDepPicker"
+            icon="guide-o"
+          />
+          <van-cell
+            title="目的地"
+            value="{{ searchQuery || '请选择' }}"
+            is-link
+            border="{{ false }}"
+            bind:click="onShowDestPicker"
+            icon="location-o"
+          />
+        </van-cell-group>
+        
+        <!-- Departure Picker Popup -->
+        <van-popup show="{{ showDepPicker }}" position="bottom" round bind:close="onCloseDepPicker">
+            <van-picker
+              columns="{{ cityColumns }}"
+              show-toolbar
+              title="选择出发地"
+              bind:confirm="onConfirmDep"
+              bind:cancel="onCloseDepPicker"
+            />
+        </van-popup>
 
-        <view class="divider"></view>
+        <!-- Destination Picker Popup -->
+        <van-popup show="{{ showDestPicker }}" position="bottom" round bind:close="onCloseDestPicker">
+            <van-picker
+              columns="{{ cityColumns }}"
+              show-toolbar
+              title="选择目的地"
+              bind:confirm="onConfirmDest"
+              bind:cancel="onCloseDestPicker"
+            />
+        </van-popup>
 
-        <!-- Category Section (Picker + AI Button) -->
-        <view class="category-row">
-          <view class="picker-container">
-              <view class="row-label">物品品类</view>
-              <picker bindchange="onCategoryChange" value="{{categoryIndex}}" range="{{categories}}">
-                <view class="picker-view">
-                  <text class="{{categoryIndex !== null ? 'picker-value' : 'picker-placeholder'}}">{{categories[categoryIndex] || '请选择品类'}}</text>
-                  <van-icon name="arrow-down" color="#999" size="24rpx" />
-                </view>
-              </picker>
-          </view>
-          
-          <!-- Enhanced AI Button -->
-          <view class="ai-btn" bindtap="onAIRecognize">
-              <van-icon name="scan" size="36rpx" color="#fff" />
-              <text class="ai-text">AI 识别</text>
-          </view>
-        </view>
+        <!-- Category & Weight Section -->
+        <van-cell-group inset title="物品信息" custom-style="margin-top: 24rpx;">
+          <van-cell
+            title="物品品类"
+            value="{{ categories[categoryIndex] || '请选择' }}"
+            is-link
+            bind:click="onShowCategorySheet"
+          />
+          <van-field
+            value="{{ itemWeight }}"
+            label="预估重量"
+            type="digit"
+            placeholder="输入重量"
+            bind:change="onWeightInput"
+            border="{{ false }}"
+            use-button-slot
+          >
+            <view slot="button" style="color: #333; font-weight: bold;">KG</view>
+          </van-field>
+        </van-cell-group>
 
-        <!-- Weight Section -->
-        <view class="input-row">
-          <view class="row-label">预估重量</view>
-          <input class="row-input" type="digit" placeholder="输入重量 (KG)" value="{{itemWeight}}" bindinput="onWeightInput" placeholder-style="color: #bbb;" />
+        <!-- AI Recognition Button -->
+        <view style="margin-top: 24rpx; padding: 0 24rpx;">
+          <van-button 
+            plain 
+            type="info" 
+            icon="scan" 
+            size="small"
+            bind:click="onAIRecognize"
+          >AI 智能识别物品</van-button>
         </view>
 
         <!-- Agreement Section -->
-        <view class="agreement-box">
-            <van-checkbox value="{{ agreed }}" bind:change="onAgreementChange" shape="round" icon-size="28rpx" checked-color="#1eb1f7">
-              同意 <text class="link-text">《禁止带货清单》</text>
-            </van-checkbox>
-          </view>
+        <view class="agreement-box" style="margin-top: 30rpx;">
+          <van-checkbox value="{{ agreed }}" bind:change="onAgreementChange" shape="round" icon-size="32rpx" checked-color="#1eb1f7">
+            同意 <text class="link-text">《禁止带货清单》</text>
+          </van-checkbox>
+        </view>
 
         <!-- Action Button -->
-        <view class="action-area">
-          <button class="search-btn" bindtap="onSearchOrAdd">查询报价</button>
+        <view class="action-area" style="margin-top: 30rpx;">
+          <van-button type="info" block round size="large" bind:click="onSearchOrAdd" color="linear-gradient(to right, #4bb0ff, #6149f6)">查询报价</van-button>
           <view class="disclaimer">*结果仅供参考</view>
         </view>
       </view>
+
+      <!-- Category Action Sheet -->
+      <van-action-sheet
+        show="{{ showCategorySheet }}"
+        actions="{{ categoryActions }}"
+        bind:close="onCloseCategorySheet"
+        bind:select="onSelectCategory"
+        cancel-text="取消"
+        close-on-click-action
+      />
 
       <!-- Results Section and Fallback (Reused Logic) -->
       <view class="flights-list" wx:if="{{filteredFlights.length > 0 || showFallback}}">
@@ -73,7 +111,7 @@
         <block wx:if="{{filteredFlights.length > 0}}">
           <view class="section-subtitle">匹配航班</view>
           <block wx:for="{{filteredFlights}}" wx:key="id">
-            <view class="flight-card">
+            <view class="flight-card" bind:tap="onGoToDetail" data-id="{{item.id}}">
               <view class="flight-header">
                 <text class="flight-no">{{item.flightNo}}</text>
                 <text class="flight-price">¥{{item.pricePerKg}}/KG</text>
@@ -92,7 +130,7 @@
                   <text class="value">{{item.availableWeight}} KG</text>
                 </view>
               </view>
-              <van-button type="primary" size="small" block round bind:click="onRequestCarry" data-item="{{item}}">请求带货</van-button>
+
             </view>
           </block>
         </block>

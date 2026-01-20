@@ -45,7 +45,7 @@
             <van-icon name="logistics" color="#fff" size="50rpx" />
           </view>
           <view class="role-info">
-            <text class="role-title">我是带货人</text>
+            <text class="role-title">顺路带</text>
             <text class="role-desc">发布行程 赚取收益</text>
           </view>
           <van-icon name="arrow" color="#fff" size="30rpx" class="arrow-icon" />
@@ -56,7 +56,7 @@
             <van-icon name="bag" color="#fff" size="50rpx" />
           </view>
           <view class="role-info">
-            <text class="role-title">我是需带货</text>
+            <text class="role-title">找帮带</text>
             <text class="role-desc">快速寄送 安全抵达</text>
           </view>
           <van-icon name="arrow" color="#fff" size="30rpx" class="arrow-icon" />

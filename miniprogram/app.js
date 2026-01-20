@@ -18,7 +18,7 @@ App({
     userInfo: null
   },
 
-  initUserInfo(name, score, avatar, token, id, uid, balance) {
+  initUserInfo(name, score, avatar, token, id, uid, balance, isVerified) {
     this.globalData.userInfo = {
       name: name,
       score: score,
@@ -26,7 +26,8 @@ App({
       token: token,
       _id: id,
       uid: uid,
-      balance: balance || 0
+      balance: balance || 0,
+      isVerified: isVerified || false
     }
   },
 

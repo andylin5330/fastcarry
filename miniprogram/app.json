@@ -15,7 +15,9 @@
         "sender/orderDetail",
         "address/addressList",
         "address/addressEdit",
-        "wallet/wallet"
+        "wallet/wallet",
+        "auth/verification",
+        "sender/flightDetail/flightDetail"
       ]
     }
   ],

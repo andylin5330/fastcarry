@@ -1,0 +1,59 @@
+<van-toast id="van-toast" />
+<view class="container">
+  <view class="header">
+    <van-icon name="shield-o" size="80rpx" color="#1eb1f7" />
+    <view class="title">实名认证</view>
+    <view class="subtitle">为了保障平台交易安全，发单/接单前需完成实名认证。</view>
+  </view>
+
+  <van-cell-group inset title="身份信息">
+    <van-field
+      value="{{ realName }}"
+      label="真实姓名"
+      placeholder="请输入身份证姓名"
+      bind:change="onNameChange"
+    />
+    <van-field
+      value="{{ idCard }}"
+      label="身份证号"
+      placeholder="请输入18位身份证号"
+      maxlength="18"
+      bind:change="onIdCardChange"
+    />
+  </van-cell-group>
+
+  <van-cell-group inset title="证件照片 (可选)" style="margin-top: 20rpx;">
+    <view class="upload-area">
+        <van-uploader 
+          file-list="{{ fileList }}" 
+          max-count="1" 
+          bind:after-read="afterRead" 
+          bind:delete="deleteImg"
+        />
+        <view class="upload-tip">请上传身份证正面照</view>
+    </view>
+  </van-cell-group>
+
+  <view class="action-area">
+    <van-button 
+      type="info" 
+      block 
+      round 
+      bind:click="onSubmit"
+      disabled="{{ !realName || idCard.length !== 18 }}"
+    >提交认证</van-button>
+    
+    <van-button 
+      type="primary" 
+      plain
+      block 
+      round 
+      custom-style="margin-top: 20rpx;"
+      bind:click="onQuickVerify"
+    >一键认证 (测试通道)</van-button>
+
+    <view class="security-tip">
+      <van-icon name="lock" /> 信息仅用于身份核验，平台严格保密
+    </view>
+  </view>
+</view>

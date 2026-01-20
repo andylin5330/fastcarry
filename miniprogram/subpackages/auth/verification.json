@@ -1,0 +1,13 @@
+{
+    "navigationBarTitleText": "实名认证",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTextStyle": "black",
+    "usingComponents": {
+        "van-field": "@vant/weapp/field/index",
+        "van-button": "@vant/weapp/button/index",
+        "van-cell-group": "@vant/weapp/cell-group/index",
+        "van-icon": "@vant/weapp/icon/index",
+        "van-toast": "@vant/weapp/toast/index",
+        "van-uploader": "@vant/weapp/uploader/index"
+    }
+}

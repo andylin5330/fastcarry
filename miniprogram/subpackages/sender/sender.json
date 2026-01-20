@@ -10,9 +10,14 @@
     "van-dropdown-item": "@vant/weapp/dropdown-item/index",
     "van-tabs": "@vant/weapp/tabs/index",
     "van-tab": "@vant/weapp/tab/index",
-    "van-empty": "@vant/weapp/empty/index"
+    "van-empty": "@vant/weapp/empty/index",
+    "van-cell": "@vant/weapp/cell/index",
+    "van-cell-group": "@vant/weapp/cell-group/index",
+    "van-action-sheet": "@vant/weapp/action-sheet/index",
+    "van-popup": "@vant/weapp/popup/index",
+    "van-picker": "@vant/weapp/picker/index"
   },
-  "navigationBarTitleText": "需带物",
+  "navigationBarTitleText": "找帮带",
   "navigationBarBackgroundColor": "#fff",
   "navigationBarTextStyle": "black",
   "enablePullDownRefresh": false,

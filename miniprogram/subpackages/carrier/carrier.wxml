@@ -5,102 +5,168 @@
     
     <!-- Tab 1: Post Trip (Existing Carrier Form) -->
     <van-tab title="发布行程">
-      <view style="padding-top: 20rpx;">
-        <view class="form-card">
-          <view class="section-title">航班信息</view>
-          <van-cell-group inset>
-            <van-field
-              value="{{ flightNo }}"
-              label="航班号"
-              placeholder="例如: CA981"
-              border="{{ false }}"
-              bind:change="onFlightInput"
-            />
-          </van-cell-group>
-        </view>
+      <view class="wizard-container">
+        <van-steps steps="{{ steps }}" active="{{ currentStep }}" active-color="#1eb1f7" />
 
-        <view class="form-card">
-          <view class="section-title">行李空间</view>
-          <van-radio-group value="{{ spaceType }}" bind:change="onSpaceTypeChange" direction="horizontal" class="radio-group-spaced">
-            <van-radio name="empty" checked-color="#1eb1f7">空箱子</van-radio>
-            <van-radio name="remaining" checked-color="#1eb1f7">剩余空间</van-radio>
-            <van-radio name="abnormal" checked-color="#ff9800">异常件</van-radio>
-          </van-radio-group>
+        <view class="step-content">
+            <!-- Step 1: Flight -->
+            <view class="step-view" wx:if="{{currentStep === 0}}">
+                <view class="section-title">航班信息</view>
+                <van-cell-group inset>
+                    <van-field
+                      value="{{ flightNo }}"
+                      label="航班号"
+                      placeholder="例如: CA981"
+                      border="{{ false }}"
+                      bind:change="onFlightInput"
+                    />
+                </van-cell-group>
+            </view>
 
-          <!-- Conditional: Remaining Space Details -->
-          <view class="conditional-area" wx:if="{{spaceType === 'remaining'}}">
-             <view class="divider"></view>
-             <van-field
-                value="{{ remainingWeight }}"
-                label="剩余重量"
-                placeholder="KG"
-                type="digit"
-                bind:change="onWeightInput"
-              />
-              
-              <view class="volume-row">
-                 <text class="volume-label">目测剩余体积</text>
-                 <view class="chips-container">
-                    <view 
-                      wx:for="{{volumeOptions}}" 
-                      wx:key="*this"
-                      class="chip {{volumeRatio === item ? 'active' : ''}}"
-                      bindtap="onVolumeSelect"
-                      data-value="{{item}}"
-                    >
-                      {{item}}
+            <!-- Step 2: Route -->
+            <view class="step-view" wx:if="{{currentStep === 1}}">
+                <view class="section-title">行程地点</view>
+                <van-cell-group inset>
+                    <van-cell
+                      title="出发地"
+                      value="{{ departure || '请选择' }}"
+                      is-link
+                      bind:click="onShowDepPicker"
+                    />
+                    <van-cell
+                      title="目的地"
+                      value="{{ destination || '请选择' }}"
+                      is-link
+                      border="{{ false }}"
+                      bind:click="onShowDestPicker"
+                    />
+                </van-cell-group>
+            </view>
+
+            <!-- Departure Picker Popup -->
+            <van-popup show="{{ showDepPicker }}" position="bottom" round bind:close="onCloseDepPicker">
+                <van-picker
+                  columns="{{ cityColumns }}"
+                  show-toolbar
+                  title="选择出发地"
+                  bind:confirm="onConfirmDep"
+                  bind:cancel="onCloseDepPicker"
+                />
+            </van-popup>
+
+            <!-- Destination Picker Popup -->
+            <van-popup show="{{ showDestPicker }}" position="bottom" round bind:close="onCloseDestPicker">
+                <van-picker
+                  columns="{{ cityColumns }}"
+                  show-toolbar
+                  title="选择目的地"
+                  bind:confirm="onConfirmDest"
+                  bind:cancel="onCloseDestPicker"
+                />
+            </van-popup>
+
+            <!-- Step 3: Address -->
+            <view class="step-view" wx:if="{{currentStep === 2}}">
+                 <view class="section-title-row">
+                    <view class="section-title" style="margin-bottom: 0;">收件地址</view>
+                    <view class="use-saved-link" bindtap="onSelectSavedAddress">
+                      <van-icon name="location-o" /> 使用已存地址
                     </view>
-                 </view>
-              </view>
-          </view>
-           <view class="conditional-area" wx:if="{{spaceType === 'abnormal'}}">
-             <view class="divider"></view>
-             <view class="tips">适合携带形状不规则或超大件物品</view>
-          </view>
-        </view>
-
-        <view class="form-card">
-          <view class="section-title">行程地点</view>
-           <van-cell-group inset>
-            <van-field
-              value="{{ departure }}"
-              label="出发地"
-              placeholder="城市/机场"
-              bind:change="onDepInput"
-            />
-            <van-field
-              value="{{ destination }}"
-              label="目的地"
-              placeholder="城市/机场"
-              border="{{ false }}"
-              bind:change="onDestInput"
-            />
-          </van-cell-group>
-        </view>
-
-        <view class="form-card">
-          <view class="section-title-row">
-            <view class="section-title" style="margin-bottom: 0;">收件地址 (自动保存)</view>
-            <view class="use-saved-link" bindtap="onSelectSavedAddress">
-              <van-icon name="location-o" /> 使用已存地址
+                  </view>
+                   <van-field
+                      value="{{ address }}"
+                      type="textarea"
+                      placeholder="请输入方便交接的收件地址..."
+                      autosize
+                      border="{{ false }}"
+                      bind:change="onAddressInput"
+                      custom-style="background: #f9f9f9; border-radius: 12rpx; padding: 20rpx;"
+                    />
             </view>
-          </view>
-           <van-field
-              value="{{ address }}"
-              type="textarea"
-              placeholder="请输入方便交接的收件地址..."
-              autosize
-              border="{{ false }}"
-              bind:change="onAddressInput"
-              custom-style="background: #f9f9f9; border-radius: 12rpx; padding: 20rpx;"
-            />
-            <view class="save-status" wx:if="{{isAddressSaved}}">
-               <van-icon name="checked" color="#4caf50" /> 已保存
+
+            <!-- Step 4: Space -->
+            <view class="step-view" wx:if="{{currentStep === 3}}">
+                <view class="section-title">行李空间</view>
+                <van-radio-group value="{{ spaceType }}" bind:change="onSpaceTypeChange" direction="horizontal" class="radio-group-spaced">
+                    <van-radio name="empty" checked-color="#1eb1f7">空箱子</van-radio>
+                    <van-radio name="remaining" checked-color="#1eb1f7">剩余空间</van-radio>
+                    <van-radio name="abnormal" checked-color="#ff9800">异常件</van-radio>
+                </van-radio-group>
+
+                <view class="conditional-area" wx:if="{{spaceType === 'remaining'}}">
+                     <view class="divider"></view>
+                     <van-field
+                        value="{{ remainingWeight }}"
+                        label="剩余重量"
+                        placeholder="0"
+                        type="digit"
+                        bind:change="onWeightInput"
+                        use-button-slot
+                      >
+                        <view slot="button" style="color: #333; font-weight: bold;">KG</view>
+                      </van-field>
+                      <view style="font-size: 24rpx; color: #999; margin-left: 32rpx; margin-bottom: 20rpx;">平台指导价: 100元/kg</view>
+                      
+                      <view class="volume-row">
+                         <text class="volume-label">目测剩余体积</text>
+                         <view class="chips-container">
+                            <van-tag 
+                              wx:for="{{volumeOptions}}" 
+                              wx:key="*this"
+                              type="{{volumeRatio === item ? 'primary' : 'default'}}"
+                              plain="{{volumeRatio !== item}}"
+                              round
+                              size="medium"
+                              bindtap="onVolumeSelect"
+                              data-value="{{item}}"
+                              custom-class="volume-tag"
+                            >{{item}}</van-tag>
+                         </view>
+                      </view>
+                </view>
+                 <view class="conditional-area" wx:if="{{spaceType === 'abnormal'}}">
+                     <view class="divider"></view>
+                     <view class="tips">适合携带形状不规则或超大件物品</view>
+                  </view>
             </view>
         </view>
 
-        <view class="action-area">
-          <van-button type="info" block round size="large" bind:click="onSubmit" color="linear-gradient(to right, #4bb0ff, #6149f6)">发布行程</van-button>
+        <!-- Navigation Buttons -->
+        <!-- Navigation Buttons -->
+        <view class="wizard-actions">
+            <!-- Spacer for Step 0 -->
+            <view wx:if="{{currentStep === 0}}" style="width: 40%;"></view>
+            
+            <!-- Prev Button Wrapper -->
+            <view wx:if="{{currentStep > 0}}" style="width: 40%;">
+                <van-button 
+                  plain 
+                  round 
+                  block
+                  type="default" 
+                  bind:click="prevStep" 
+                >上一步</van-button>
+            </view>
+            
+            <!-- Next Button Wrapper -->
+            <view wx:if="{{currentStep < 3}}" style="width: 40%;">
+                <van-button 
+                  round 
+                  block
+                  type="info" 
+                  bind:click="nextStep" 
+                >下一步</van-button>
+            </view>
+            
+            <!-- Submit Button Wrapper -->
+            <view wx:if="{{currentStep === 3}}" style="width: 40%;">
+                <van-button 
+                  round 
+                  block
+                  type="info" 
+                  bind:click="onSubmit" 
+                >发布行程</van-button>
+            </view>
         </view>
       </view>
     </van-tab>

@@ -1,3 +1,5 @@
+const app = getApp();
+
 Page({
     data: {
         activeTab: 0,
@@ -13,15 +15,34 @@ Page({
         // Results Data
         flights: [
             { id: 201, flightNo: 'MU588', date: '2023-11-01', availableWeight: 5.0, destination: '上海', cityCode: 'SHA', pricePerKg: 100 },
-            { id: 202, flightNo: 'UA857', date: '2023-11-02', availableWeight: 10.0, destination: '上海', cityCode: 'SHA', pricePerKg: 120 },
-            { id: 203, flightNo: 'CZ328', date: '2023-11-05', availableWeight: 2.0, destination: '广州', cityCode: 'CAN', pricePerKg: 90 },
-            { id: 204, flightNo: 'CA982', date: '2023-11-03', availableWeight: 8.0, destination: '北京', cityCode: 'PEK', pricePerKg: 110 }
+            { id: 202, flightNo: 'UA857', date: '2023-11-02', availableWeight: 10.0, destination: '上海', cityCode: 'SHA', pricePerKg: 100 },
+            { id: 203, flightNo: 'CZ328', date: '2023-11-05', availableWeight: 2.0, destination: '广州', cityCode: 'CAN', pricePerKg: 100 },
+            { id: 204, flightNo: 'CA982', date: '2023-11-03', availableWeight: 8.0, destination: '北京', cityCode: 'PEK', pricePerKg: 100 }
         ],
         filteredFlights: [],
         showFallback: false,
         nearbyCities: [
             { name: '苏州', distance: '100km' },
             { name: '杭州', distance: '180km' }
+        ],
+
+        // Action Sheet State
+        showCategorySheet: false,
+        categoryActions: [
+            { name: '药物' },
+            { name: '电器' },
+            { name: '特货(含自用书籍)' },
+            { name: '普货' },
+            { name: '文件' }
+        ],
+        // Picker State
+        showDepPicker: false,
+        showDestPicker: false,
+        cityColumns: [
+            '上海', '北京', '广州', '深圳', '杭州', '成都', '重庆', '西安',
+            '多伦多', '温哥华', '蒙特利尔', '卡尔加里',
+            '纽约', '洛杉矶', '旧金山', '西雅图', '芝加哥',
+            '伦敦', '巴黎', '东京', '首尔', '新加坡', '悉尼'
         ]
     },
 
@@ -104,27 +125,61 @@ Page({
         });
     },
 
-    // Input Handlers
-    onDepInput: function (e) {
-        this.setData({ departure: e.detail.value });
+    // Picker Handlers
+    onShowDepPicker() {
+        this.setData({ showDepPicker: true });
     },
 
-    onSearchInput: function (e) {
-        this.setData({ searchQuery: e.detail.value });
+    onCloseDepPicker() {
+        this.setData({ showDepPicker: false });
     },
 
+    onConfirmDep(e) {
+        this.setData({
+            departure: e.detail.value,
+            showDepPicker: false
+        });
+    },
 
+    onShowDestPicker() {
+        this.setData({ showDestPicker: true });
+    },
+
+    onCloseDestPicker() {
+        this.setData({ showDestPicker: false });
+    },
+
+    onConfirmDest(e) {
+        this.setData({
+            searchQuery: e.detail.value, // searchQuery maps to destination
+            showDestPicker: false
+        });
+    },
 
     onWeightInput: function (e) {
-        this.setData({ itemWeight: e.detail.value });
-    },
-
-    onCategoryChange: function (e) {
-        this.setData({ categoryIndex: e.detail.value });
+        this.setData({ itemWeight: e.detail });
     },
 
     onAgreementChange: function (e) {
         this.setData({ agreed: e.detail });
+    },
+
+    // Category Action Sheet Handlers
+    onShowCategorySheet() {
+        this.setData({ showCategorySheet: true });
+    },
+
+    onCloseCategorySheet() {
+        this.setData({ showCategorySheet: false });
+    },
+
+    onSelectCategory(e) {
+        const selectedName = e.detail.name;
+        const index = this.data.categories.indexOf(selectedName);
+        this.setData({
+            categoryIndex: index >= 0 ? index : null,
+            showCategorySheet: false
+        });
     },
 
     // AI Recognition
@@ -307,6 +362,26 @@ Page({
 
     // Unified Action
     onSearchOrAdd: async function () {
+        if (!app.globalData.userInfo) {
+            wx.showToast({ title: '请先登录', icon: 'none' });
+            return;
+        }
+
+        // Real-name Authentication Check
+        if (!app.globalData.userInfo.isVerified) {
+            wx.showModal({
+                title: '实名认证提示',
+                content: '为了保障交易安全，寄件/查询前需完成实名认证。',
+                confirmText: '去认证',
+                success: (res) => {
+                    if (res.confirm) {
+                        wx.navigateTo({ url: '/subpackages/auth/verification' });
+                    }
+                }
+            });
+            return;
+        }
+
         if (!this.data.agreed) {
             wx.showToast({ title: '请先勾选禁带清单', icon: 'none' });
             return;
@@ -354,7 +429,7 @@ Page({
                     cityCode: 'ARR',
                     date: trip.createTime ? new Date(trip.createTime).toLocaleDateString() : '近期',
                     availableWeight: trip.details && trip.details.weight ? trip.details.weight : '咨询',
-                    pricePerKg: '???'
+                    pricePerKg: 100
                 }));
 
                 this.setData({
@@ -368,6 +443,14 @@ Page({
             console.error('Search failed', err);
             wx.showToast({ title: '查询失败', icon: 'none' });
         }
+    },
+
+    // Navigate to Detail
+    onGoToDetail(e) {
+        const id = e.currentTarget.dataset.id;
+        wx.navigateTo({
+            url: `/subpackages/sender/flightDetail/flightDetail?id=${id}`
+        });
     },
 
     // Unified Request Action
