@@ -20,6 +20,14 @@
         </view>
       </view>
     </block>
+
+    <!-- Typing Indicator -->
+    <view class="message-item not-me" wx:if="{{ isTyping }}">
+      <image class="avatar" src="{{ otherAvatar }}" />
+      <view class="content-box typing-indicator">
+        <text>...</text>
+      </view>
+    </view>
     <view id="bottom-anchor" style="height: 1rpx;"></view>
   </scroll-view>
 

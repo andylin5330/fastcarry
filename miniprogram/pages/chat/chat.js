@@ -10,7 +10,8 @@ Page({
         myAvatar: 'cloud://cloud1-1g75i69o3bf03886/images/default_avatar.png',
         otherAvatar: '/images/ai_avatar.png',
         chatType: 'user', // 'user' or 'system'
-        conversationId: ''
+        conversationId: '',
+        isTyping: false
     },
 
     onLoad: function (options) {
@@ -157,11 +158,15 @@ Page({
             data: userMsg
         }).then(() => {
             // Trigger AI response
+            this.setData({ isTyping: true });
+
             return wx.cloud.callFunction({
                 name: 'aiAssistant',
                 data: { text: content }
             });
         }).then(res => {
+            this.setData({ isTyping: false });
+
             const aiMsg = {
                 content: res.result.reply,
                 senderId: 'system',
@@ -175,6 +180,7 @@ Page({
             });
         }).catch(err => {
             console.error('System chat error:', err);
+            this.setData({ isTyping: false });
             wx.showToast({
                 title: '发送失败',
                 icon: 'none'
